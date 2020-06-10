@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="regions">
+        <item>Asia</item>
+        <item>Europe</item>
+        <item>North America</item>
+        <item>South America</item>
+        <item>Africa</item>
+        <item>Australia</item>
+    </string-array>
+
+    <string-array name="questions">
+        <item>favorite color</item>
+        <item>first job</item>
+        <item>dream car</item>
+        <item>crush</item>
+    </string-array>
+
+
+    
+</resources>
