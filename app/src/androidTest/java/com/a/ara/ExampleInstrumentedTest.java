@@ -20,6 +20,7 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         //this is a test
+        //secound test
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.a.ara", appContext.getPackageName());
