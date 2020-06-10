@@ -1,10 +1,12 @@
 package com.a.ara;
 
+import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,6 +22,7 @@ public class SignUpActivity extends AppCompatActivity {
     String[] region_items ,question_items ;
     String region;
     String question;
+    Button btn_commit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         sp_region = (Spinner) findViewById(R.id.sp_region);
         sp_question = (Spinner) findViewById(R.id.sp_question);
+
+        btn_commit = (Button) findViewById(R.id.btn_commit);
 
         region_items = getResources().getStringArray(R.array.regions);
         question_items = getResources().getStringArray(R.array.questions);
@@ -92,9 +97,54 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+//        et_username.setError("empty username");
+//        et_username.requestFocus();
+
+        btn_commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!testUsername(et_username.getText().toString())){
+                    et_username.setError("empty username");
+                    et_username.requestFocus();
+                }
+                if (!isValidEmailAddress(et_email.getText().toString())){
+                    et_email.setError("invalid Email Address");
+                    et_email.requestFocus();
+                }
+                if (!isValidPassword(et_password.getText().toString())){
+                    et_password.setError("invalid password");
+                    et_password.requestFocus();
+                }
+                if (!isValidBdate(et_birthday.getText().toString())){
+                    et_birthday.setError("invalid birthday format");
+                    et_birthday.requestFocus();
+                }
 
 
 
+            }
+
+
+        });
+
+    }
+    public boolean testUsername(String username){
+        return !(username.length() > 50 | username.length() < 4 );
+
+    }
+    public boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+    }
+    public boolean isValidPassword(String password){
+        String regex = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$";
+        return password.matches(regex);
+    }
+    public boolean isValidBdate(String Bdate){
+        String regex = "^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";
+        return Bdate.matches(regex);
     }
 
     // select * from users where username=(entered username) --> if null then insert it

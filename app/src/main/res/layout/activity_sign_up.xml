@@ -158,7 +158,13 @@
             android:enabled="false"
             android:hint="- not available -"
             />
-
+        <Button
+            android:layout_marginLeft="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Commit"
+            android:id="@+id/btn_commit"
+            />
     </LinearLayout>
 
 </RelativeLayout>
