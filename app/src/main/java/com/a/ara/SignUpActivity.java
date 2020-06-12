@@ -112,7 +112,10 @@ public class SignUpActivity extends AppCompatActivity {
                     et_email.requestFocus();
                 }
                 if (!isValidPassword(et_password.getText().toString())){
-                    et_password.setError("invalid password");
+                    et_password.setError("invalid pattern for password");
+                    et_password.requestFocus();
+                }if (et_password.getText().toString().length() <8 |et_password.getText().toString().length()>50){
+                    et_password.setError("password must be between 8 and 50 characters");
                     et_password.requestFocus();
                 }
                 if (!isValidBdate(et_birthday.getText().toString())){
@@ -139,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
         return m.matches();
     }
     public boolean isValidPassword(String password){
-        String regex = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$";
+        String regex = "[a-zA-Z0-9@$&!]+";
         return password.matches(regex);
     }
     public boolean isValidBdate(String Bdate){
