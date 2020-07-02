@@ -37,11 +37,20 @@ public class dbHelper extends SQLiteOpenHelper{
             " 'ownerid' integer not null , 'title' text , 'create_date' date , 'number_of_musics' integer , " +
             "foreign key(ownerid) references tb_users(userid))";
 
-    private final String cmd7 = "CREATE TABLE IF NOT EXISTS 'tb_music'()";
-    private final String cmd8 = "CREATE TABLE IF NOT EXISTS 'tb_album'()";
-    private final String cmd9 = "CREATE TABLE IF NOT EXISTS 'tb_follow'()";
-    private final String cmd10 = "CREATE TABLE IF NOT EXISTS 'tb_shared_playlist'()";
-    private final String cmd11 = "CREATE TABLE IF NOT EXISTS 'tb_liked_playlist'()";
+    private final String cmd7 = "CREATE TABLE IF NOT EXISTS 'tb_music'('id' INTEGER PRIMARY KEY NOT NULL ," +
+            " 'title' text ,'duration' integer , 'genre' text)";
+
+    private final String cmd8 = "CREATE TABLE IF NOT EXISTS 'tb_album'('id' INTEGER PRIMARY KEY NOT NULL ," +
+            " 'publish_date' date, 'title' text , 'genre' text)";
+
+    private final String cmd9 = "CREATE TABLE IF NOT EXISTS 'tb_follow'('followingid' integer,'followerid' integer ," +
+            " 'follow_date' date , foreign key(followingid) references tb_users(userid) ,foreign key(followerid) references tb_users(userid))";
+
+    private final String cmd10 = "CREATE TABLE IF NOT EXISTS 'tb_shared_playlist'('userid' integer,'playlistid' integer ," +
+            "foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
+
+    private final String cmd11 = "CREATE TABLE IF NOT EXISTS 'tb_liked_playlist'('userid' integer,'playlistid' integer ," +
+            " 'like_date' date ,foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
 
     private final String cmd12 = "CREATE TABLE IF NOT EXISTS 'tb_played_song'('userid' integer not null, 'musicid' integer not null,"+"" +
             "'played_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), primary key (played_date) )";
@@ -70,7 +79,21 @@ public class dbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(cmd);
-// db.execSQL(cmd2);
+        db.execSQL(cmd3);
+        db.execSQL(cmd4);
+        db.execSQL(cmd5);
+        db.execSQL(cmd6);
+        db.execSQL(cmd7);
+        db.execSQL(cmd8);
+        db.execSQL(cmd9);
+        db.execSQL(cmd10);
+        db.execSQL(cmd11);
+        db.execSQL(cmd12);
+        db.execSQL(cmd13);
+        db.execSQL(cmd14);
+        db.execSQL(cmd15);
+        db.execSQL(cmd16);
+        db.execSQL(cmd17);
         Log.i("dbResult", "table created");
     }
 
