@@ -255,6 +255,12 @@ public class SignUpActivity extends AppCompatActivity {
         String regex = "^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";
         return Bdate.matches(regex);
     }
+    public boolean isArtist(int usernameid){
+        int temp = usernameid;
+        while(temp>10) temp = temp /10;
+        if (temp == 2) return true;
+        else return false;
+    }
 
     // select * from users where username=(entered username) --> if null then insert it
     // else show a alert dialog

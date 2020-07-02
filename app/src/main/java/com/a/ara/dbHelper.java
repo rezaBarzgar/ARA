@@ -64,10 +64,10 @@ public class dbHelper extends SQLiteOpenHelper{
     private final String cmd15 = "CREATE TABLE IF NOT EXISTS 'tb_liked_album'('userid' integer not null, 'albumid' integer not null," +
             "foreign key(userid) references tb_users(userid),foreign key(albumid) references tb_album(id))";
 
-    private final String cmd16 = "CREATE TABLE IF NOT EXISTS 'tb_have_playlist'('playlistid' integer not null, 'userid' integer not null, 'musicid' integer not null" +
-            "'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (playlistid) references tb_playlist(id)";
+    private final String cmd16 = "CREATE TABLE IF NOT EXISTS 'tb_have_playlist'('playlistid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
+            "'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (playlistid) references tb_playlist(id))";
 
-    private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null" +
+    private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
             "'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
 
 
