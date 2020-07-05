@@ -107,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }else {
                     et_nickname.setEnabled(false);
                     et_birthday.setEnabled(true);
-                    et_birthday.setHint("Birth date");
+                    et_birthday.setHint("Birth date : dd/MM/yyyy");
                     et_nickname.setHint("- not available -");
                 }
             }
@@ -182,19 +182,51 @@ public class SignUpActivity extends AppCompatActivity {
 
                     Bundle result_bundle = new Bundle();
                     ContentValues values = new ContentValues();
+                    ContentValues sec_values = new ContentValues();
                     int max_userid = 0;
                     SQLiteDatabase db = dbh.getReadableDatabase();
-                    Cursor cursor2 = db.rawQuery("SELECT MAX(userid) FROM 'tb_users'",null);
-
-                    if (cursor2.getCount()>0) {
-                        if (cursor2.moveToFirst()) {
-                            max_userid = cursor2.getInt(cursor2.getColumnIndex("MAX(userid)"));
+                    Cursor cursor2;
+                    if (!Cbox.isChecked()) {
+                        cursor2 = db.rawQuery("SELECT MAX(userid) FROM 'tb_users' where userid<1900", null);
+                        if (cursor2.getCount()>0) {
+                            if (cursor2.moveToFirst()) {
+                                max_userid = cursor2.getInt(cursor2.getColumnIndex("MAX(userid)"));
+                            }
+                            cursor2.close();
+                            if (max_userid == 0){
+                                max_userid = 1000;
+                            }
+                            Toast.makeText(SignUpActivity.this, "max userid : " + max_userid, Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(SignUpActivity.this, "Error userid", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        cursor2.close();
-//                        Toast.makeText(SignUpActivity.this, "max userid : " + max_userid, Toast.LENGTH_SHORT).show();
+                        sec_values.put(listner.key_user_id,max_userid+1);
+                        sec_values.put(listner.key_premium_type,0);
+                        sec_values.put(listner.key_birth_date,
+                                dbh.date_to_string(dbh.string_to_date(et_birthday.getText().toString())));
+                        dbh.insert(sec_values,"tb_listner");
                     }else {
-                        Toast.makeText(SignUpActivity.this, "Error userid", Toast.LENGTH_SHORT).show();
-                        return;
+                        cursor2 = db.rawQuery("SELECT MAX(userid) FROM 'tb_users' where userid>2000", null);
+                        if (cursor2.getCount()>0) {
+                            if (cursor2.moveToFirst()) {
+                                max_userid = cursor2.getInt(cursor2.getColumnIndex("MAX(userid)"));
+                            }
+                            cursor2.close();
+                            if (max_userid == 0){
+                                max_userid = 2000;
+                            }
+                            Toast.makeText(SignUpActivity.this, "max userid : " + max_userid, Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(SignUpActivity.this, "Error userid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        sec_values.put(artist.key_user_id,max_userid+1);
+                        sec_values.put(artist.key_valid,0);
+                        if (et_nickname.getText().toString().length() > 3 & et_nickname.getText().toString().length() < 30){
+                            sec_values.put(artist.key_nickname,et_nickname.getText().toString());
+                        }
+                        dbh.insert(sec_values,"tb_artist");
                     }
                     values.put(user.key_user_id,max_userid+1);
                     values.put(user.key_user_first_name,et_firstname.getText().toString());
@@ -205,7 +237,7 @@ public class SignUpActivity extends AppCompatActivity {
                     values.put(user.key_user_region,region);
                     values.put(user.key_user_question,question);
                     values.put(user.key_user_answer,et_answer.getText().toString());
-                    dbh.insert(values);
+                    dbh.insert(values,"tb_users");
                     cursor.close();
                     result_bundle.putInt(user.key_user_id,values.getAsInteger(user.key_user_id));
                     result_bundle.putString(user.key_user_first_name,values.getAsString(user.key_user_first_name));
@@ -254,12 +286,6 @@ public class SignUpActivity extends AppCompatActivity {
     public boolean isValidBdate(String Bdate){
         String regex = "^[0-3]?[0-9]/[0-3]?[0-9]/(?:[0-9]{2})?[0-9]{2}$";
         return Bdate.matches(regex);
-    }
-    public boolean isArtist(int usernameid){
-        int temp = usernameid;
-        while(temp>10) temp = temp /10;
-        if (temp == 2) return true;
-        else return false;
     }
 
     // select * from users where username=(entered username) --> if null then insert it

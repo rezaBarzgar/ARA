@@ -17,6 +17,13 @@
         <item>crush</item>
     </string-array>
 
+    <string-array name="search_options">
+        <item>users</item>
+        <item>artists</item>
+        <item>songs</item>
+        <item>albums</item>
+    </string-array>
+
 
     
 </resources>

@@ -9,12 +9,17 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     EditText et_username,et_password;
     SharedPreferences preferences;
     String current_user = "";
+    String search_for;
+    String[] search_for_items ;
+    ListView listView;
+    List list = new ArrayList();
+    ArrayAdapter adapter;
 
     public static final int sign_up_req_code = 1;
 
@@ -61,10 +71,61 @@ public class MainActivity extends AppCompatActivity {
     private void init_main_page_views() {
         TextView show_info = (TextView) findViewById(R.id.tv_show_info);
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
-                "\n" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
-                " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
-                "\n" + preferences.getString(user.key_user_email,"NOT FOUND") +
-                "\n" + preferences.getString(user.key_user_region,"NOT FOUND"));
+        "\t" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
+        " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
+        "\n" + preferences.getString(user.key_user_email,"NOT FOUND") +
+        "\t" + preferences.getString(user.key_user_region,"NOT FOUND"));
+
+        Spinner sp_search_for = (Spinner) findViewById(R.id.sp_search_for);
+        search_for_items = getResources().getStringArray(R.array.search_options);
+
+        ArrayAdapter<String> s_adapter = new ArrayAdapter<String>(MainActivity.this,
+                android.R.layout.simple_spinner_item,search_for_items);
+        s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_search_for.setAdapter(s_adapter);
+        sp_search_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                search_for = parent.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        listView = (ListView) findViewById(R.id.search_list);
+
+        SearchView searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (search_for.equals("users")){
+                    list = dbh.get_users_listner(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("artists")){
+                    list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("songs")){
+                    list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("albums")){
+                    list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }
+//                else {
+//                    list = null;
+//                    refresh_display(list,preferences.getInt(user.key_user_id,0));
+//                }
+                return false;
+            }
+        });
     }
 
     private void initviews() {
@@ -84,16 +145,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SQLiteDatabase db = dbh.getWritableDatabase();
-        Log.i("dbResult" , "database opened");
-        dbh.onUpgrade(db,db.getVersion(),db.getVersion());
-        int v = db.getVersion();
-//        Toast.makeText(this, String.valueOf(v), Toast.LENGTH_SHORT).show();
-        if (db != null && db.isOpen()){
-            db.close();
-            Log.i("dbResult" , "database closed");
-        }
-
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
                 loginUser();
             }
         });
+    }
+
+    private void refresh_display(List list,int userid,String tag){
+        if (list == null) list = new ArrayList();
+        adapter = new AraAdapter(this,list,userid,tag);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -164,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 values.put(user.key_user_region,jsonObject.getString(user.key_user_region));
                 values.put(user.key_user_question,jsonObject.getString(user.key_user_question));
                 values.put(user.key_user_answer,jsonObject.getString(user.key_user_answer));
-                dbh.insert(values);
+                dbh.insert(values,"tb_users");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -206,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Wrong Pass", Toast.LENGTH_SHORT).show();
                 return;
             }
+            preferences.edit().putBoolean("isArtist",isArtist(cursor
+                    .getInt(cursor.getColumnIndex(user.key_user_id)))).apply();
             preferences.edit().putString(user.key_user_name,
                     cursor.getString(cursor.getColumnIndex(user.key_user_name))).apply();
             preferences.edit().putInt(user.key_user_id,
@@ -223,6 +282,18 @@ public class MainActivity extends AppCompatActivity {
         if (db.isOpen())db.close();
         setContentView(R.layout.main_page);
         init_main_page_views();
+    }
+
+    private void clear_database(){
+        SQLiteDatabase db = dbh.getWritableDatabase();
+        Log.i("dbResult" , "database opened");
+        dbh.onUpgrade(db,db.getVersion(),db.getVersion());
+        int v = db.getVersion();
+//        Toast.makeText(this, String.valueOf(v), Toast.LENGTH_SHORT).show();
+        if (db != null && db.isOpen()){
+            db.close();
+            Log.i("dbResult" , "database closed");
+        }
     }
 
     @Override
@@ -249,6 +320,21 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        menu.add("clear database").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                clear_database();
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
+
+    public boolean isArtist(int usernameid){
+        int temp = usernameid;
+        while(temp>10) temp = temp /10;
+        if (temp == 2) return true;
+        else return false;
+    }
+
 }

@@ -3,9 +3,18 @@ package com.a.ara;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class dbHelper extends SQLiteOpenHelper{
 
@@ -22,16 +31,16 @@ public class dbHelper extends SQLiteOpenHelper{
             " 'question' TEXT ," +
             " 'answer' TEXT )" ;
 
-// private final String cmd2 = "CREATE TABLE IF NOT EXISTS 'TEST' ('name' TEXT , 'phone' INTEGER);";
+//    private final String cmd2 = "CREATE TABLE IF NOT EXISTS 'TEST' ('name' TEXT , 'phone' INTEGER);";
 
     private final String cmd3 = "CREATE TABLE IF NOT EXISTS 'tb_listner'('userid' integer not null ,'premium_type' integer ," +
-            " 'premium_trial' date , 'birth_date' date , foreign key(userid) references tb_users(userid))";
+            " 'premium_trial' datetime , 'birth_date' dateime , foreign key(userid) references tb_users(userid))";
 
     private final String cmd4 = "CREATE TABLE IF NOT EXISTS 'tb_listner_credit'('userid' integer not null ," +
             " 'credit_number' text , 'expire_date' date , foreign key(userid) references tb_users(userid))";
 
     private final String cmd5 = "CREATE TABLE IF NOT EXISTS 'tb_artist'('userid' integer not null ," +
-            " 'genre' text ,'career_start_date' date , 'valid' bool , 'nickname' text , foreign key(userid) references tb_users(userid))";
+            " 'genre' text ,'career_start_date' datetime , 'valid' bool , 'nickname' text , foreign key(userid) references tb_users(userid))";
 
     private final String cmd6 = "CREATE TABLE IF NOT EXISTS 'tb_playlist'('id' INTEGER PRIMARY KEY NOT NULL ," +
             " 'ownerid' integer not null , 'title' text , 'create_date' date , 'number_of_musics' integer , " +
@@ -65,15 +74,15 @@ public class dbHelper extends SQLiteOpenHelper{
             "foreign key(userid) references tb_users(userid),foreign key(albumid) references tb_album(id))";
 
     private final String cmd16 = "CREATE TABLE IF NOT EXISTS 'tb_have_playlist'('playlistid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
-            "'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (playlistid) references tb_playlist(id))";
+            " 'added_date' date , foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (playlistid) references tb_playlist(id))";
 
     private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
-            "'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
+            " 'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
 
 
     public dbHelper(Context context,String tableName) {
         super(context, db_name, null, 1);
-// this.tablename = tableName;
+//        this.tablename = tableName;
     }
 
     @Override
@@ -100,19 +109,155 @@ public class dbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ tablename);
-// db.execSQL("DROP TABLE IF EXISTS 'TEST'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_listner'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_artist'");
         Log.i("dbResult","table dropped");
         onCreate(db);
     }
 
-    public void insert(ContentValues values){
+    public void insert(ContentValues values,String tb_name){
         SQLiteDatabase db = getWritableDatabase();
-        long insertid = db.insert(tablename,null,values);
+        long insertid = db.insert(tb_name,null,values);
         if (insertid == -1){
             Log.i("insertion","fucked with id : "+insertid);
         }else {
             Log.i("insertion","inserted with id : "+insertid);
         }
         if (db.isOpen())db.close();
+    }
+
+    public String date_to_string(Date date){
+        Date d = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String s = "";
+        if (date==null) {
+            s = format.format(d);
+        }else {
+            s = format.format(date);
+        }
+        return s;
+    }
+
+    public Date string_to_date(String s){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = format.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public List get_users_listner(String query,String username){
+        SQLiteDatabase db = getReadableDatabase();
+        List user_list_listner = new ArrayList();
+        Cursor cursor = db.rawQuery("select * from 'tb_users' where userid<1999 and" +
+                " (firstname like '%" + query + "%' or lastname like '%" + query + "%'" +
+                " or username like '" + query + "%') and not username='" + username + "'",null);
+        if (cursor.moveToFirst()){
+            do {
+                ContentValues temp_v = new ContentValues();
+                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                user_list_listner.add(temp_v);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen())db.close();
+        return user_list_listner;
+    }
+
+    public List get_users_artist(String query,String username){
+        SQLiteDatabase db = getReadableDatabase();
+        List user_list_artist = new ArrayList();
+        Cursor cursor = db.rawQuery("write query here",null); // fill
+        if (cursor.moveToFirst()){
+            do {
+                ContentValues temp_v = new ContentValues();
+                // put values in temp_v
+                user_list_artist.add(temp_v);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen())db.close();
+        return user_list_artist;
+    } // todo fill this
+
+    public List get_song(String query,String username){
+        SQLiteDatabase db = getReadableDatabase();
+        List song_list = new ArrayList();
+        Cursor cursor = db.rawQuery("write query here",null); // fill
+        if (cursor.moveToFirst()){
+            do {
+                ContentValues temp_v = new ContentValues();
+                // put values in temp_v
+                song_list.add(temp_v);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen())db.close();
+        return song_list;
+    } // todo fill this
+
+    public List get_album(String query,String username){
+        SQLiteDatabase db = getReadableDatabase();
+        List album_list = new ArrayList();
+        Cursor cursor = db.rawQuery("write query here",null); // fill
+        if (cursor.moveToFirst()){
+            do {
+                ContentValues temp_v = new ContentValues();
+                // put values in temp_v
+                album_list.add(temp_v);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen())db.close();
+        return album_list;
+    } // todo fill this
+
+    public String follow_user(int following_id,int follower_id){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
+                + String.valueOf(following_id) + " and followerid="
+                + String.valueOf(follower_id),null);
+
+        if (cursor.getCount()>0){
+            return "you are already following this user";
+        }else {
+            cursor.close();
+            if (db.isOpen())db.close();
+            db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("followingid",following_id);
+            values.put("followerid",follower_id);
+            values.put("follow_date",date_to_string(null));
+            long insertid = db.insert("tb_follow",null,values);
+            if (insertid == -1){
+                return "Failed";
+            }else return "Followed";
+        }
+    }
+
+    public String unfollow_user(int following_id,int follower_id){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
+                + String.valueOf(following_id) + " and followerid="
+                + String.valueOf(follower_id),null);
+
+        if (cursor.getCount()==0){
+            return "you are not following this user";
+        }else {
+            cursor.close();
+            if (db.isOpen())db.close();
+            db = getWritableDatabase();
+            long deleteid = db.delete("tb_follow","followingid =" + String.valueOf(following_id) +
+                    " and followerid =" + String.valueOf(follower_id),null);
+            if (deleteid== -1){
+                return "Failed";
+            }else return "unFollowed";
+        }
     }
 }
