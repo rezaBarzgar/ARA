@@ -173,43 +173,73 @@ public class dbHelper extends SQLiteOpenHelper{
     public List get_users_artist(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List user_list_artist = new ArrayList();
-        Cursor cursor = db.rawQuery("write query here",null); // fill
+        Cursor cursor = db.rawQuery("select * " +
+                "from 'tb_users' as user , 'tb_artist' as artist " +
+                "where user.userid between 1999 and 2999 and" +
+                "(user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%' or user.username like '%"+query+"%'" +
+                "or artist.nickname like '%"+query+"%')" +
+                "and not username = '"+username+"'",null);
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
-                // put values in temp_v
+                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+
+                //todo check line below if it is ok or not!
+                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 user_list_artist.add(temp_v);
+
+
             }while (cursor.moveToNext());
         }
         cursor.close();
         if (db.isOpen())db.close();
         return user_list_artist;
-    } // todo fill this
+    }
 
     public List get_song(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("write query here",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_music' as music, 'tb_have_album' as have_album, 'tb_album' as album," +
+                "'tb_artist' as artist"  +
+                "where music.title like '%"+query+"%' and music.id = have_album.musicid and artist.id = have_album.albumid" +
+                "and artist.userid = have_album.userid",null); // fill
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
-                // put values in temp_v
+                temp_v.put(Music.key_music_id,cursor.getInt(cursor.getColumnIndex(Music.key_music_id)));
+                temp_v.put(Music.key_music_duration,cursor.getString(cursor.getColumnIndex(Music.key_music_duration)));
+                temp_v.put(Music.key_music_genre,cursor.getString(cursor.getColumnIndex(Music.key_music_genre)));
+                temp_v.put(Music.key_music_title,cursor.getString(cursor.getColumnIndex(Music.key_music_title)));
+                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(Album.key_title,cursor.getString(cursor.getColumnIndex(Album.key_title)));
+
                 song_list.add(temp_v);
             }while (cursor.moveToNext());
         }
         cursor.close();
         if (db.isOpen())db.close();
         return song_list;
-    } // todo fill this
+    }
 
-    public List get_album(String query,String username){
+    public List get_album(String query,String username){//todo check this logically
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();
-        Cursor cursor = db.rawQuery("write query here",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_music' as music, 'tb_have_album' as have_album, 'tb_album' as album," +
+                "'tb_artist' as artist"  +
+                "where album.title like '%"+query+"%' and  artist.id = have_album.albumid" +
+                "and artist.userid = have_album.userid",null); // fill
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
-                // put values in temp_v
+                temp_v.put(Album.key_id,cursor.getInt(cursor.getColumnIndex(Album.key_id)));
+                temp_v.put(Album.key_title,cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                temp_v.put(Album.key_genre,cursor.getString(cursor.getColumnIndex(Album.key_genre)));
+                temp_v.put(Album.key_publish_date,cursor.getString(cursor.getColumnIndex(Album.key_publish_date)));
+                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
                 album_list.add(temp_v);
             }while (cursor.moveToNext());
         }
