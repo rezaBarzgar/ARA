@@ -1,10 +1,5 @@
 package com.a.ara;
 
-
-/**
- * Created by REZA on 7/5/2020.
- */
-
 public class Album {
     private int id;
     private String publish_date;

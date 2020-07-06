@@ -62,9 +62,20 @@ public class AraAdapter extends ArrayAdapter{
 
         public void fill(int position){
             final ContentValues values = (ContentValues) list.get(position);
-            String s = values.getAsString(user.key_user_name);
-            s += " : " + values.getAsString(user.key_user_first_name);
-            s += " " + values.getAsString(user.key_user_last_name);
+            String s = "";
+            if (tag.equals("users")) {
+                s = values.getAsString(user.key_user_name);
+                s += " : " + values.getAsString(user.key_user_first_name);
+                s += " " + values.getAsString(user.key_user_last_name);
+            }else if (tag.equals("artists")){
+                s = values.getAsString(user.key_user_name);
+                s += " : " + values.getAsString(user.key_user_first_name);
+                s += " " + values.getAsString(user.key_user_last_name);
+            }else if (tag.equals("songs")){
+
+            }else if (tag.equals("albums")){
+
+            }
             info.setText(s);
 
             final PopupMenu popupMenu = new PopupMenu(plus_icon.getContext(),plus_icon);

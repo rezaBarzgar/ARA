@@ -1,9 +1,5 @@
 package com.a.ara;
 
-/**
- * Created by REZA on 7/5/2020.
- */
-
 public class Music {
     private int id; // primary key
     private String title;

@@ -288,6 +288,4 @@ public class SignUpActivity extends AppCompatActivity {
         return Bdate.matches(regex);
     }
 
-    // select * from users where username=(entered username) --> if null then insert it
-    // else show a alert dialog
 }

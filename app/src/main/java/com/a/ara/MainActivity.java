@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("artists")){
                     list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    if (list.size()>0){
+                        Toast.makeText(MainActivity.this, "yes", Toast.LENGTH_SHORT).show();
+                    }
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("songs")){
                     list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));

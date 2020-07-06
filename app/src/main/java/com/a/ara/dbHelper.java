@@ -18,6 +18,7 @@ import java.util.List;
 
 public class dbHelper extends SQLiteOpenHelper{
 
+    private Context context;
     private static final String db_name = "ARA_db";
     private String tablename = "tb_users";
     private final String cmd = "CREATE TABLE IF NOT EXISTS '" + tablename + "'" +
@@ -82,6 +83,7 @@ public class dbHelper extends SQLiteOpenHelper{
 
     public dbHelper(Context context,String tableName) {
         super(context, db_name, null, 1);
+        this.context = context;
 //        this.tablename = tableName;
     }
 
@@ -103,6 +105,7 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL(cmd15);
         db.execSQL(cmd16);
         db.execSQL(cmd17);
+        db.execSQL("insert into 'tb_artist' values(2001,'pop',null,null,null)");
         Log.i("dbResult", "table created");
     }
 
@@ -174,11 +177,13 @@ public class dbHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         List user_list_artist = new ArrayList();
         Cursor cursor = db.rawQuery("select * " +
-                "from 'tb_users' as user , 'tb_artist' as artist " +
-                "where user.userid between 1999 and 2999 and" +
-                "(user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%' or user.username like '%"+query+"%'" +
-                "or artist.nickname like '%"+query+"%')" +
+                "from 'tb_users' as user " +
+                "where user.userid between 2000 and 2999 and" +
+                "(user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%' or user.username like '%"+query+"%')" +
                 "and not username = '"+username+"'",null);
+//        Cursor cursor = db.rawQuery("select * " +
+//                "from 'tb_users' as user , 'tb_artist' as artist " +
+//                "where user.userid between 2000 and 2999",null);
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
@@ -186,13 +191,11 @@ public class dbHelper extends SQLiteOpenHelper{
                 temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
                 temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
                 temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
-
-                //todo check line below if it is ok or not!
-                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
+//                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+//                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 user_list_artist.add(temp_v);
-
-
+                // query vaqti tb_artist ro miarim azyat mikone , tuye zarb khareji o in chiza moshkel dre
+                // chon hardotshun userid drn fek konm
             }while (cursor.moveToNext());
         }
         cursor.close();
@@ -246,7 +249,9 @@ public class dbHelper extends SQLiteOpenHelper{
         cursor.close();
         if (db.isOpen())db.close();
         return album_list;
-    } // todo fill this
+    }
+
+    // query ha moshkel drn
 
     public String follow_user(int following_id,int follower_id){
         SQLiteDatabase db = getReadableDatabase();
@@ -270,7 +275,6 @@ public class dbHelper extends SQLiteOpenHelper{
             }else return "Followed";
         }
     }
-
 
     public String unfollow_user(int following_id,int follower_id){
         SQLiteDatabase db = getReadableDatabase();
