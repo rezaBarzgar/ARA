@@ -271,6 +271,10 @@ public class dbHelper extends SQLiteOpenHelper{
         }
     }
 
+    public void fart(){
+        // here
+    }
+
     public String unfollow_user(int following_id,int follower_id){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
