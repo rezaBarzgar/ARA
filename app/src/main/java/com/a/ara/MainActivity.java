@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.search_list);
 
+        ContentValues values = new ContentValues();
+        values.put("userid",2001);
+        values.put("genre","Rock");
+        values.put("nickname","x");
+        dbh.insert(values,"tb_artist");
+
         SearchView searchView = (SearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

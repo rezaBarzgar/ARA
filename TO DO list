@@ -3,3 +3,5 @@ date ha ro ok konim (hour + minute)
 check baray tb_playlist.number of musics
 
 -query ha chon az dota table estefade mikonim moshkel drn byd rush fekr konim
+
++ foreign key unique nist chon mn tunstm chnta record ba ye userid to tb_artist add konm

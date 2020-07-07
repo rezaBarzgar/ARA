@@ -105,7 +105,7 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL(cmd15);
         db.execSQL(cmd16);
         db.execSQL(cmd17);
-        db.execSQL("insert into 'tb_artist' values(2001,'pop',null,null,null)");
+//        db.execSQL("insert into 'tb_artist' values(2001,'pop',null,null,null)");
         Log.i("dbResult", "table created");
     }
 
@@ -177,10 +177,11 @@ public class dbHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         List user_list_artist = new ArrayList();
         Cursor cursor = db.rawQuery("select * " +
-                "from 'tb_users' as user " +
-                "where user.userid between 2000 and 2999 and" +
-                "(user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%' or user.username like '%"+query+"%')" +
-                "and not username = '"+username+"'",null);
+                "from 'tb_users' as user ,'tb_artist' as artist" +
+                " where user.userid between 2000 and 2999 and" +
+                " (user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%'" +
+                " or user.username like '%"+query+"%' or artist.nickname like '%"+query+"%')" +
+                " and not username = '"+username+"'",null);
 //        Cursor cursor = db.rawQuery("select * " +
 //                "from 'tb_users' as user , 'tb_artist' as artist " +
 //                "where user.userid between 2000 and 2999",null);
