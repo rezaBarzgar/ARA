@@ -19,7 +19,7 @@ import java.util.List;
 public class dbHelper extends SQLiteOpenHelper{
 
     private Context context;
-    private static final String db_name = "ARA_db";
+    private static final String db_name = "ara_db";
     private String tablename = "tb_users";
     private final String cmd = "CREATE TABLE IF NOT EXISTS '" + tablename + "'" +
             "( 'userid' INTEGER PRIMARY KEY NOT NULL ," +
@@ -176,15 +176,11 @@ public class dbHelper extends SQLiteOpenHelper{
     public List get_users_artist(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List user_list_artist = new ArrayList();
-        Cursor cursor = db.rawQuery("select * " +
-                "from 'tb_users' as user ,'tb_artist' as artist" +
-                " where user.userid between 2000 and 2999 and" +
-                " (user.firstname like '%"+query+"%' or user.lastname like '%"+query+"%'" +
-                " or user.username like '%"+query+"%' or artist.nickname like '%"+query+"%')" +
-                " and not username = '"+username+"'",null);
-//        Cursor cursor = db.rawQuery("select * " +
-//                "from 'tb_users' as user , 'tb_artist' as artist " +
-//                "where user.userid between 2000 and 2999",null);
+        Cursor cursor = db.rawQuery("select * from 'tb_users' as U left join 'tb_artist' as A " +
+                "on U.userid = A.userid where U.userid between 2000 and 2999 and " +
+                "(U.firstname like '%" + query + "%' or U.lastname like '%" + query + "%' " +
+                "or U.username like '%" + query + "%' or A.nickname like '%" + query + "%') " +
+                "and not U.username = '" + username + "'",null);
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
@@ -192,11 +188,9 @@ public class dbHelper extends SQLiteOpenHelper{
                 temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
                 temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
                 temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
-//                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-//                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
+                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 user_list_artist.add(temp_v);
-                // query vaqti tb_artist ro miarim azyat mikone , tuye zarb khareji o in chiza moshkel dre
-                // chon hardotshun userid drn fek konm
             }while (cursor.moveToNext());
         }
         cursor.close();

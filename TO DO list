@@ -2,6 +2,8 @@ genre ha bayad enum beshan
 date ha ro ok konim (hour + minute)
 check baray tb_playlist.number of musics
 
--query ha chon az dota table estefade mikonim moshkel drn byd rush fekr konim
-
 + foreign key unique nist chon mn tunstm chnta record ba ye userid to tb_artist add konm
+
++ moshkel query ha hal shod : niaz b left join ya full join dare
++ function : get_users_artist --> done
++ reza 2 ta func dg ro fill kone
