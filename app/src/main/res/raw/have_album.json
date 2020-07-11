@@ -1,0 +1,38 @@
+[
+  {
+    "albumid": "4001",
+    "userid": "2001",
+    "musicid": "3001",
+    "added_date": "12/1/11"
+  },
+  {
+    "albumid": "4002",
+    "userid": "2002",
+    "musicid": "3002",
+    "added_date": "3/6/13"
+  },
+  {
+    "albumid": "4003",
+    "userid": "2003",
+    "musicid": "3003",
+    "added_date": "20/11/2014"
+  },
+  {
+    "albumid": "4004",
+    "userid": "2004",
+    "musicid": "3004",
+    "added_date": "17/4/2010"
+  },
+  {
+    "albumid": "4005",
+    "userid": "2005",
+    "musicid": "3005",
+    "added_date": "21/3/2009"
+  },
+  {
+    "albumid": "4006",
+    "userid": "2006",
+    "musicid": "3006",
+    "added_date": "8/2/08"
+  }
+]

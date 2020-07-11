@@ -1,0 +1,38 @@
+[
+  {
+    "id": "3001",
+    "title": "titanuim",
+    "duration": "240",
+    "genre": "pop"
+  },
+  {
+    "id": "3002",
+    "title": "all of me",
+    "duration": "270",
+    "genre": "pop"
+  },
+  {
+    "id": "3003",
+    "title": "shot clock",
+    "duration": "180",
+    "genre": "hip hop"
+  },
+  {
+    "id": "3004",
+    "title": "heathens",
+    "duration": "260",
+    "genre": "rock"
+  },
+  {
+    "id": "3005",
+    "title": "same old love",
+    "duration": "250",
+    "genre": "pop"
+  },
+  {
+    "id": "3006",
+    "title": "go loko",
+    "duration": "270",
+    "genre": "hip hop"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "4001",
+    "publish_date": "2011",
+    "title": "titanium",
+    "genre": "pop"
+  },
+  {
+    "id": "4002",
+    "publish_date": "2013",
+    "title": "all of me single",
+    "genre": "pop"
+  },
+  {
+    "id": "4003",
+    "publish_date": "2014",
+    "title": "ella mai",
+    "genre": "hip hop"
+  },
+  {
+    "id": "4004",
+    "publish_date": "2010",
+    "title": "heathens single",
+    "genre": "rock"
+  },
+  {
+    "id": "4005",
+    "publish_date": "2009",
+    "title": "revival",
+    "genre": "pop"
+  },
+  {
+    "id": "4006",
+    "publish_date": "2008",
+    "title": "go loko",
+    "genre": "hip hop"
+  }
+]

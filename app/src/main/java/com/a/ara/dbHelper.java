@@ -114,6 +114,9 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS "+ tablename);
         db.execSQL("DROP TABLE IF EXISTS 'tb_listner'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_artist'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_music'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_album'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
         Log.i("dbResult","table dropped");
         onCreate(db);
     }
@@ -201,10 +204,11 @@ public class dbHelper extends SQLiteOpenHelper{
     public List get_song(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music on music.id = have_album.musicid 'tb_album' as album," +
-                "left join 'tb_artist' as artist on have_album.userid = artist.userid" +
-                "left join 'tb_album' as album on album.id = have_album.albumid"  +
-                "where music.title like '%"+query+"%'",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music " +
+                "on music.id = have_album.musicid " +
+                "left join 'tb_artist' as artist_b on have_album.userid = artist_b.userid " +
+                "left join 'tb_album' as album on album.id = have_album.albumid "  +
+                "where music.title like '" + query + "%'",null);
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
@@ -223,12 +227,12 @@ public class dbHelper extends SQLiteOpenHelper{
         return song_list;
     }
 
-    public List get_album(String query,String username){//todo check this logically
+    public List get_album(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as H join 'tb_album' as album on H.albumid = album.id" +
-                "join 'tb_artist' as artist on H.userid = artist.userid"  +
-                "where album.title like '%"+query+"%'",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as H join 'tb_album' as album on H.albumid = album.id " +
+                "join 'tb_artist' as artist_b on H.userid = artist_b.userid "  +
+                "where album.title like '"+query+"%'",null);
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
@@ -244,8 +248,6 @@ public class dbHelper extends SQLiteOpenHelper{
         if (db.isOpen())db.close();
         return album_list;
     }
-
-    // query ha moshkel drn
 
     public String follow_user(int following_id,int follower_id){
         SQLiteDatabase db = getReadableDatabase();

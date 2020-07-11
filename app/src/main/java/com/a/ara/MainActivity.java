@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -97,12 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.search_list);
 
-        ContentValues values = new ContentValues();
-        values.put("userid",2001);
-        values.put("genre","Rock");
-        values.put("nickname","x");
-        dbh.insert(values,"tb_artist");
-
         SearchView searchView = (SearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -117,15 +112,9 @@ public class MainActivity extends AppCompatActivity {
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("artists")){
                     list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
-                    if (list.size()>0){
-                        Toast.makeText(MainActivity.this, "yes", Toast.LENGTH_SHORT).show();
-                    }
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("songs")){
                     list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
-                    if (list.size()>0){
-                        Toast.makeText(MainActivity.this, "yes", Toast.LENGTH_SHORT).show();
-                    }
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("albums")){
                     list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
@@ -224,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(jsonString);
             for (int i = 0; i <jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                values.put(user.key_user_id,jsonObject.getInt(user.key_user_id));
+                values.put(user.key_user_id,
+                        Integer.valueOf(jsonObject.getString(user.key_user_id)));
                 values.put(user.key_user_first_name,jsonObject.getString(user.key_user_first_name));
                 values.put(user.key_user_last_name,jsonObject.getString(user.key_user_last_name));
                 values.put(user.key_user_name,jsonObject.getString(user.key_user_name));
@@ -241,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_listner(){
-        InputStream inputStream = getResources().openRawResource(R.raw.users); // should change
+        InputStream inputStream = getResources().openRawResource(R.raw.listner); // should change
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -256,11 +246,29 @@ public class MainActivity extends AppCompatActivity {
 
         if (sb.equals(null))return;
         String jsonString = sb.toString();
-        // continue
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put(listner.key_user_id,
+                        Integer.valueOf(jsonObject.getString(listner.key_user_id)));
+                values.put(listner.key_premium_type,
+                        Integer.valueOf(jsonObject.getString(listner.key_premium_type)));
+                values.put(listner.key_premium_trial,
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString(listner.key_premium_type))));
+                values.put(listner.key_birth_date,
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString(listner.key_birth_date))));
+                dbh.insert(values,"tb_listner");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void add_artist(){
-        InputStream inputStream = getResources().openRawResource(R.raw.users); // should change
+        int count = 0;
+        InputStream inputStream = getResources().openRawResource(R.raw.artist);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -275,7 +283,133 @@ public class MainActivity extends AppCompatActivity {
 
         if (sb.equals(null))return;
         String jsonString = sb.toString();
-        // continue
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                count++;
+                values.put(artist.key_user_id,
+                        Integer.valueOf(jsonObject.getString(artist.key_user_id)));
+                values.put(artist.key_genre,jsonObject.getString(artist.key_genre));
+                values.put(artist.key_career_start_date,
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString(artist.key_career_start_date))));
+                values.put(artist.key_valid,Boolean.valueOf(jsonObject.getString(artist.key_valid)));
+                values.put(artist.key_nickname,jsonObject.getString(artist.key_nickname));
+
+                dbh.insert(values,"tb_artist");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("json_show",String.valueOf(count));
+    }
+
+    private void add_music(){
+        InputStream inputStream = getResources().openRawResource(R.raw.music);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put(Music.key_music_id,
+                        Integer.valueOf(jsonObject.getString(Music.key_music_id)));
+                values.put(Music.key_music_title,jsonObject.getString(Music.key_music_title));
+                values.put(Music.key_music_duration,
+                        Integer.valueOf(jsonObject.getString(Music.key_music_duration)));
+                values.put(Music.key_music_genre,jsonObject.getString(Music.key_music_genre));
+
+                dbh.insert(values,"tb_music");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_album(){
+        InputStream inputStream = getResources().openRawResource(R.raw.album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put(Album.key_id,
+                        Integer.valueOf(jsonObject.getString(Album.key_id)));
+                values.put(Album.key_title,jsonObject.getString(Album.key_title));
+                values.put(Album.key_publish_date,
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString(Album.key_publish_date))));
+                values.put(Album.key_genre,jsonObject.getString(Album.key_genre));
+
+                dbh.insert(values,"tb_album");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_have_album(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("albumid",
+                        Integer.valueOf(jsonObject.getString("albumid")));
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("musicid",
+                        Integer.valueOf(jsonObject.getString("musicid")));
+                values.put("added_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("added_date"))));
+
+                dbh.insert(values,"tb_have_album");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loginUser() {
@@ -348,13 +482,64 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("add users").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+        SubMenu subMenu = menu.addSubMenu("import records");
+        subMenu.add("add users").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 addUser();
                 return false;
             }
         });
+        subMenu.add("add listners").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_listner();
+                return false;
+            }
+        });
+        subMenu.add("add artists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_artist();
+                return false;
+            }
+        });
+        subMenu.add("add Musics").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_music();
+                return false;
+            }
+        });
+        subMenu.add("add Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_album();
+                return false;
+            }
+        });
+        subMenu.add("add have Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_have_album();
+                return false;
+            }
+        });
+
+        menu.add("import all").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                addUser();
+                add_listner();
+                add_artist();
+                add_music();
+                add_album();
+                add_have_album();
+                return false;
+            }
+        });
+
         menu.add("log out").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
