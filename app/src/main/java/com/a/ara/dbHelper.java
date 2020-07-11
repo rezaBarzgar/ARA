@@ -197,14 +197,14 @@ public class dbHelper extends SQLiteOpenHelper{
         if (db.isOpen())db.close();
         return user_list_artist;
     }
-
+    //todo kheyli shak daram doroste ya na
     public List get_song(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select * from 'tb_music' as music, 'tb_have_album' as have_album, 'tb_album' as album," +
-                "'tb_artist' as artist"  +
-                "where music.title like '%"+query+"%' and music.id = have_album.musicid and artist.id = have_album.albumid" +
-                "and artist.userid = have_album.userid",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music on music.id = have_album.musicid 'tb_album' as album," +
+                "left join 'tb_artist' as artist on have_album.userid = artist.userid" +
+                "left join 'tb_album' as album on album.id = have_album.albumid"  +
+                "where music.title like '%"+query+"%'",null); // fill
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
@@ -226,10 +226,9 @@ public class dbHelper extends SQLiteOpenHelper{
     public List get_album(String query,String username){//todo check this logically
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select * from 'tb_music' as music, 'tb_have_album' as have_album, 'tb_album' as album," +
-                "'tb_artist' as artist"  +
-                "where album.title like '%"+query+"%' and  artist.id = have_album.albumid" +
-                "and artist.userid = have_album.userid",null); // fill
+        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as H join 'tb_album' as album on H.albumid = album.id" +
+                "join 'tb_artist' as artist on H.userid = artist.userid"  +
+                "where album.title like '%"+query+"%'",null); // fill
         if (cursor.moveToFirst()){
             do {
                 ContentValues temp_v = new ContentValues();
