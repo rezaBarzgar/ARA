@@ -38,7 +38,7 @@ public class dbHelper extends SQLiteOpenHelper{
             " 'premium_trial' datetime , 'birth_date' dateime , foreign key(userid) references tb_users(userid))";
 
     private final String cmd4 = "CREATE TABLE IF NOT EXISTS 'tb_listner_credit'('userid' integer not null ," +
-            " 'credit_number' text , 'expire_date' date , foreign key(userid) references tb_users(userid))";
+            " 'credit_number' text , 'expire_date' date , foreign key(userid) references tb_users(userid))"; // should be filled later
 
     private final String cmd5 = "CREATE TABLE IF NOT EXISTS 'tb_artist'('userid' integer not null ," +
             " 'genre' text ,'career_start_date' datetime , 'valid' bool , 'nickname' text , foreign key(userid) references tb_users(userid))";
@@ -197,7 +197,7 @@ public class dbHelper extends SQLiteOpenHelper{
         if (db.isOpen())db.close();
         return user_list_artist;
     }
-    //todo kheyli shak daram doroste ya na
+
     public List get_song(String query,String username){
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();

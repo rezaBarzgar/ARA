@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("songs")){
                     list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    if (list.size()>0){
+                        Toast.makeText(MainActivity.this, "yes", Toast.LENGTH_SHORT).show();
+                    }
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("albums")){
                     list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
@@ -235,6 +238,44 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void add_listner(){
+        InputStream inputStream = getResources().openRawResource(R.raw.users); // should change
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        // continue
+    }
+
+    private void add_artist(){
+        InputStream inputStream = getResources().openRawResource(R.raw.users); // should change
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        // continue
     }
 
     private void loginUser() {
