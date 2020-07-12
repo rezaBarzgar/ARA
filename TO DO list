@@ -5,3 +5,10 @@ check baray tb_playlist.number of musics
 + foreign key unique nist chon mn tunstm chnta record ba ye userid to tb_artist add konm
 
 + change name repeated title
+
++Show own profile or others
++Profile options
++Show followers
++Upgrade to vip request or unvalid artist to valid (create 'tb_requests')
++Add song to playlist (fragment or alertdialog)
++Artists page
