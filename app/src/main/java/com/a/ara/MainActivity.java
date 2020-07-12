@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     List list = new ArrayList();
     ArrayAdapter adapter;
+    Button show_profile;
 
     public static final int sign_up_req_code = 1;
 
@@ -70,12 +71,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_main_page_views() {
-        TextView show_info = (TextView) findViewById(R.id.tv_show_info);
+        TextView show_info = (TextView) findViewById(R.id.tv_brief_name);
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
-        "\t" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
-        " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
-        "\n" + preferences.getString(user.key_user_email,"NOT FOUND") +
-        "\t" + preferences.getString(user.key_user_region,"NOT FOUND"));
+        "\n" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
+        " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
+
+        show_profile = (Button) findViewById(R.id.btn_show_profile);
+        show_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent show_pro = new Intent(MainActivity.this, ShowProfile.class);
+                Bundle carry_info = new Bundle();
+                carry_info.putInt(user.key_user_id,
+                        preferences.getInt(user.key_user_id,0));
+                carry_info.putString(user.key_user_name,
+                        preferences.getString(user.key_user_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_first_name,
+                        preferences.getString(user.key_user_first_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_last_name,
+                        preferences.getString(user.key_user_last_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_email,
+                        preferences.getString(user.key_user_email,"NOT FOUND"));
+                carry_info.putString(user.key_user_region,
+                        preferences.getString(user.key_user_region,"NOT FOUND"));
+                show_pro.putExtra("carry_info",carry_info);
+                startActivity(show_pro);
+            }
+        });
 
         Spinner sp_search_for = (Spinner) findViewById(R.id.sp_search_for);
         search_for_items = getResources().getStringArray(R.array.search_options);
@@ -565,7 +587,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public boolean isArtist(int usernameid){
+    public static boolean isArtist(int usernameid){
         int temp = usernameid;
         while(temp>10) temp = temp /10;
         if (temp == 2) return true;

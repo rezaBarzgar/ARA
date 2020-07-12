@@ -80,6 +80,10 @@ public class AraAdapter extends ArrayAdapter{
                 s = values.getAsString(Album.key_title);
                 s += " : " + values.getAsString(artist.key_nickname);
                 s += " _ " + values.getAsString(Album.key_genre);
+            }else if (tag.equals("follow_items")){
+                s = values.getAsString(user.key_user_name);
+                s += " : " + values.getAsString(user.key_user_first_name);
+                s += " " + values.getAsString(user.key_user_last_name);
             }
             info.setText(s);
 
@@ -103,7 +107,7 @@ public class AraAdapter extends ArrayAdapter{
                     }
                 });
             }else if (tag.equals("artists")){
-                popupMenu.inflate(R.menu.artist_popup_menu); //         fill artist_popup_menu.xml
+                popupMenu.inflate(R.menu.artist_popup_menu);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -113,7 +117,7 @@ public class AraAdapter extends ArrayAdapter{
                     }
                 });
             } else if (tag.equals("songs")){
-                popupMenu.inflate(R.menu.song_popup_menu); //           fill song_popup_menu.xml
+                popupMenu.inflate(R.menu.song_popup_menu);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -123,7 +127,7 @@ public class AraAdapter extends ArrayAdapter{
                     }
                 });
             } else if (tag.equals("albums")){
-                popupMenu.inflate(R.menu.album_popup_menu); //          fill album_popup_menu.xml
+                popupMenu.inflate(R.menu.album_popup_menu);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -132,6 +136,8 @@ public class AraAdapter extends ArrayAdapter{
                         return false;
                     }
                 });
+            }else if (tag.equals("follow_items")){
+
             }
             plus_icon.setOnClickListener(new View.OnClickListener() {
                 @Override

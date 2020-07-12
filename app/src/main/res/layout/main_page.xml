@@ -3,13 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:gravity="center"
-        android:id="@+id/tv_show_info"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:gravity="top"
+            android:id="@+id/tv_brief_name"
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_show_profile"
+            android:text="show profile"
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
 
     <android.support.v7.widget.SearchView
         android:id="@+id/search_view"

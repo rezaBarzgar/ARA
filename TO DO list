@@ -6,9 +6,8 @@ check baray tb_playlist.number of musics
 
 + change name repeated title
 
-+Show own profile or others
-+Profile options
-+Show followers
++Show others profile
++popup menu for follow items
 +Upgrade to vip request or unvalid artist to valid (create 'tb_requests')
 +Add song to playlist (fragment or alertdialog)
 +Artists page

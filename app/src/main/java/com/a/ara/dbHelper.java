@@ -117,6 +117,7 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS 'tb_music'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_follow'");
         Log.i("dbResult","table dropped");
         onCreate(db);
     }
@@ -249,6 +250,63 @@ public class dbHelper extends SQLiteOpenHelper{
         return album_list;
     }
 
+    public List get_follow_items(String which,int userid){
+        SQLiteDatabase db = getReadableDatabase();
+        List result = new ArrayList();
+        Cursor cursor;
+        Cursor user_cursor;
+        int id;
+
+        if (which.equals("followers")){
+            cursor = db.rawQuery("select * from 'tb_follow' where " +
+                    "followerid=" + String.valueOf(userid),null);
+
+            if (cursor.moveToFirst()){
+                do {
+                    ContentValues values = new ContentValues();
+                    id = cursor.getInt(cursor.getColumnIndex("followingid"));
+                    user_cursor = db.rawQuery("select * from 'tb_users' where userid=" +
+                            String.valueOf(id),null);
+
+                    if (user_cursor.moveToFirst()){
+                        values.put(user.key_user_id,user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
+                        values.put(user.key_user_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
+                        values.put(user.key_user_first_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
+                        values.put(user.key_user_last_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
+                        result.add(values);
+                    }
+                    user_cursor.close(); // *******
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        }else if (which.equals("followings")){
+            cursor = db.rawQuery("select * from 'tb_follow' where " +
+                    "followingid=" + String.valueOf(userid),null);
+
+            if (cursor.moveToFirst()){
+                do {
+                    ContentValues values = new ContentValues();
+                    id = cursor.getInt(cursor.getColumnIndex("followerid"));
+                    user_cursor = db.rawQuery("select * from 'tb_users' where userid=" +
+                            String.valueOf(id),null);
+
+                    if (user_cursor.moveToFirst()){
+                        values.put(user.key_user_id,user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
+                        values.put(user.key_user_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
+                        values.put(user.key_user_first_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
+                        values.put(user.key_user_last_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
+                        result.add(values);
+                    }
+                    user_cursor.close(); // *******
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+
+        if (db.isOpen()) db.close();
+        return result;
+    }
+
     public String follow_user(int following_id,int follower_id){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
@@ -291,4 +349,35 @@ public class dbHelper extends SQLiteOpenHelper{
             }else return "unFollowed";
         }
     }
+
+    public int show_followers_count(int userid){
+        int count = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_follow' where " +
+                "followerid=" + String.valueOf(userid),null);
+
+        if (cursor.moveToFirst()){
+                count = cursor.getInt(0);
+        }
+
+        cursor.close();
+        if (db.isOpen()) db.close();
+        return count;
+    }
+
+    public int show_following_count(int userid){
+        int count = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_follow' where " +
+                "followingid=" + String.valueOf(userid),null);
+
+        if (cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+        if (db.isOpen()) db.close();
+        return count;
+    }
+
 }
