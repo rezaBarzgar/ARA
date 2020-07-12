@@ -151,6 +151,87 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void init_main_page_views_2() {
+        TextView show_info = (TextView) findViewById(R.id.tv_brief_name);
+        show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
+                "\n" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
+                " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
+
+        show_profile = (Button) findViewById(R.id.btn_show_profile);
+        show_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent show_pro = new Intent(MainActivity.this, ShowProfile.class);
+                Bundle carry_info = new Bundle();
+                carry_info.putInt(user.key_user_id,
+                        preferences.getInt(user.key_user_id,0));
+                carry_info.putString(user.key_user_name,
+                        preferences.getString(user.key_user_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_first_name,
+                        preferences.getString(user.key_user_first_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_last_name,
+                        preferences.getString(user.key_user_last_name,"NOT FOUND"));
+                carry_info.putString(user.key_user_email,
+                        preferences.getString(user.key_user_email,"NOT FOUND"));
+                carry_info.putString(user.key_user_region,
+                        preferences.getString(user.key_user_region,"NOT FOUND"));
+                show_pro.putExtra("carry_info",carry_info);
+                startActivity(show_pro);
+            }
+        });
+
+        Spinner sp_search_for = (Spinner) findViewById(R.id.sp_search_for);
+        search_for_items = getResources().getStringArray(R.array.search_options);
+
+        ArrayAdapter<String> s_adapter = new ArrayAdapter<String>(MainActivity.this,
+                android.R.layout.simple_spinner_item,search_for_items);
+        s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_search_for.setAdapter(s_adapter);
+        sp_search_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                search_for = parent.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        listView = (ListView) findViewById(R.id.search_list);
+
+        SearchView searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (search_for.equals("users")){
+                    list = dbh.get_users_listner(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("artists")){
+                    list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("songs")){
+                    list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("albums")){
+                    list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }
+//                else {
+//                    list = null;
+//                    refresh_display(list,preferences.getInt(user.key_user_id,0));
+//                }
+                return false;
+            }
+        });
+    }
+
     private void initviews() {
 
         final TextView login_result = (TextView) findViewById(R.id.login_result);
@@ -486,8 +567,13 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
         if (db.isOpen())db.close();
-        setContentView(R.layout.main_page);
-        init_main_page_views();
+        if (!isArtist(preferences.getInt(user.key_user_id,0))) {
+            setContentView(R.layout.main_page);
+            init_main_page_views();
+        }else {
+            setContentView(R.layout.main_page);
+            init_main_page_views_2();
+        }
     }
 
     private void clear_database(){
