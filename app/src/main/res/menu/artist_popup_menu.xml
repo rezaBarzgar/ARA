@@ -5,5 +5,5 @@
 
     <item android:title="unfollow" android:id="@+id/popup_menu_unfollow_artist"/>
 
-    <item android:title="show_profile" android:id="@+id/popup_menu_profile_artist"/>
+    <item android:title="show profile" android:id="@+id/popup_menu_profile_artist"/>
 </menu>

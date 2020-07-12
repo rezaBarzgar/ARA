@@ -4,14 +4,14 @@
         android:id="@+id/popup_menu_play_song"/>
     <item android:title="report"
         android:id="@+id/popup_menu_report_song"/>
-    <item android:title="go_to_artist"
+    <item android:title="go to artist"
         android:id="@+id/popup_menu_go_to_artist"/>
-    <item android:title="go_to_album"
+    <item android:title="go to album"
         android:id="@+id/popup_menu_go_to_album"/>
     <item android:title="like"
         android:id="@+id/popup_menu_like_song"/>
     <item android:title="unlike"
         android:id="@+id/popup_menu_unlike_song"/>
-    <item android:title="add_to_playlist"
+    <item android:title="add to playlist"
         android:id="@+id/popup_menu_add_to_playlist"/>
 </menu>
