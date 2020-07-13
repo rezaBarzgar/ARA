@@ -80,7 +80,6 @@ public class dbHelper extends SQLiteOpenHelper{
     private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
             " 'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
 
-
     public dbHelper(Context context,String tableName) {
         super(context, db_name, null, 1);
         this.context = context;

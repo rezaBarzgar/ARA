@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent show_pro = go_to_show_profile();
                 startActivity(show_pro);
+
             }
         });
 

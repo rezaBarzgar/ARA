@@ -4,5 +4,4 @@
         android:id="@+id/follower_popup_menu_show_profile"/>
     <item android:title="remove from your followers"
         android:id="@+id/follower_popup_menu_remove_from_followers"/>
-
 </menu>

@@ -8,4 +8,5 @@
         android:id="@+id/popup_menu_like_album"/>
     <item android:title="unlike"
         android:id="@+id/popup_menu_unlike_album"/>
+
 </menu>

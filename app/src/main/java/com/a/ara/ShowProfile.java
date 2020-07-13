@@ -30,6 +30,7 @@ public class ShowProfile extends AppCompatActivity{
         Bundle income_info = getIntent().getExtras().getBundle("carry_info");
         userid = income_info.getInt(user.key_user_id);
         is_artist = MainActivity.isArtist(userid);
+
         if (income_info.getString("type").equals("own")){
             own = true;
         }else own = false;

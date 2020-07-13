@@ -60,6 +60,7 @@ public class AraAdapter extends ArrayAdapter{
         public ViewHolder(View view){
             plus_icon = (ImageView) view.findViewById(R.id.ic_plus);
             info = (TextView) view.findViewById(R.id.tv_info);
+
         }
 
         public void fill(int position){
