@@ -20,6 +20,7 @@ public class ShowProfile extends AppCompatActivity{
     ListView listView;
     List list = new ArrayList();
     ArrayAdapter adapter;
+    Boolean own;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,9 @@ public class ShowProfile extends AppCompatActivity{
         Bundle income_info = getIntent().getExtras().getBundle("carry_info");
         userid = income_info.getInt(user.key_user_id);
         is_artist = MainActivity.isArtist(userid);
+        if (income_info.getString("type").equals("own")){
+            own = true;
+        }else own = false;
 
         if (!is_artist){
             setContentView(R.layout.activity_show_listner_profile);
@@ -73,7 +77,7 @@ public class ShowProfile extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!is_artist) {
+        if (!is_artist && own) {
             menu.add("show followers").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -92,7 +96,7 @@ public class ShowProfile extends AppCompatActivity{
             });
             menu.add("show playlists");
             menu.add("upgrade to premium");
-        }else {
+        }else if (is_artist && own){
             menu.add("show followers").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {

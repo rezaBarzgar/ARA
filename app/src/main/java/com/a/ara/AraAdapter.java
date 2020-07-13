@@ -3,7 +3,9 @@ package com.a.ara;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Point;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -80,7 +82,11 @@ public class AraAdapter extends ArrayAdapter{
                 s = values.getAsString(Album.key_title);
                 s += " : " + values.getAsString(artist.key_nickname);
                 s += " _ " + values.getAsString(Album.key_genre);
-            }else if (tag.equals("follow_items")){
+            }else if (tag.equals("follower_items")){
+                s = values.getAsString(user.key_user_name);
+                s += " : " + values.getAsString(user.key_user_first_name);
+                s += " " + values.getAsString(user.key_user_last_name);
+            }else if (tag.equals("following_items")){
                 s = values.getAsString(user.key_user_name);
                 s += " : " + values.getAsString(user.key_user_first_name);
                 s += " " + values.getAsString(user.key_user_last_name);
@@ -94,14 +100,15 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        if (id == R.id.popup_menu_follow) {
+                        if (id == R.id.popup_menu_follow_listner) {
                             Toast.makeText(activity, dbh.follow_user(userid, values.getAsInteger(user.key_user_id))
                                     , Toast.LENGTH_SHORT).show();
-                        } else if (id == R.id.popup_menu_information) {
-                            show_information(values);
-                        } else if (id == R.id.popup_menu_unfollow) {
+                        } else if (id == R.id.popup_menu_unfollow_listner) {
                             Toast.makeText(activity, dbh.unfollow_user(userid, values.getAsInteger(user.key_user_id))
                                     , Toast.LENGTH_SHORT).show();
+                        } else if (id == R.id.popup_menu_profile_listner) {
+                            Intent show_pro = show_others_profile(values);
+                            activity.startActivity(show_pro);
                         }
                         return false;
                     }
@@ -112,7 +119,16 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        //                                              fill if's here
+                        if (id == R.id.popup_menu_follow_artist){
+                            Toast.makeText(activity, dbh.follow_user(userid, values.getAsInteger(user.key_user_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_unfollow_artist){
+                            Toast.makeText(activity, dbh.unfollow_user(userid, values.getAsInteger(user.key_user_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_profile_artist){
+                            Intent show_pro = show_others_profile(values);
+                            activity.startActivity(show_pro);
+                        }
                         return false;
                     }
                 });
@@ -122,7 +138,21 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        //                                              fill if's here
+                        if (id == R.id.popup_menu_play_song){
+
+                        }else if (id == R.id.popup_menu_report_song){
+
+                        }else if (id == R.id.popup_menu_go_to_artist){
+
+                        }else if (id == R.id.popup_menu_go_to_album){
+
+                        }else if (id == R.id.popup_menu_like_song){
+
+                        }else if (id == R.id.popup_menu_unlike_song){
+
+                        }else if (id == R.id.popup_menu_add_to_playlist){
+
+                        }
                         return false;
                     }
                 });
@@ -132,12 +162,46 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        //                                              fill if's here
+                        if (id == R.id.popup_menu_play_album){
+
+                        }else if (id == R.id.popup_menu_go_to_artist){
+
+                        }else if (id == R.id.popup_menu_like_album){
+
+                        }else if (id == R.id.popup_menu_unlike_album){
+
+                        }
                         return false;
                     }
                 });
-            }else if (tag.equals("follow_items")){
+            }else if (tag.equals("follower_items")){
+                popupMenu.inflate(R.menu.follower_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.follower_popup_menu_show_profile){
 
+                        }else if (id == R.id.follower_popup_menu_remove_from_followers){
+
+                        }
+                        return false;
+                    }
+                });
+            }else if (tag.equals("following_items")){
+                popupMenu.inflate(R.menu.following_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.following_popup_menu_show_profile){
+
+                        }else if (id == R.id.following_popup_menu_unfollow){
+
+                        }
+                        return false;
+                    }
+                });
             }
             plus_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,13 +213,24 @@ public class AraAdapter extends ArrayAdapter{
 
     }
 
-    private void show_information(ContentValues values) {
-        Dialog dialog = new Dialog(activity);
-        dialog.setContentView(R.layout.information);
-        changeDialogSize(dialog);
-        TextView tv_information = (TextView) dialog.findViewById(R.id.tv_information);
-        tv_information.setText(values.getAsString(user.key_user_name));
-        dialog.show();
+    private Intent show_others_profile(ContentValues values) {
+        Intent show_pro  = new Intent(activity, ShowProfile.class);
+        Bundle carry_info = new Bundle();
+        carry_info.putInt(user.key_user_id,
+                values.getAsInteger(user.key_user_id));
+        carry_info.putString(user.key_user_name,
+                values.getAsString(user.key_user_name));
+        carry_info.putString(user.key_user_first_name,
+                values.getAsString(user.key_user_first_name));
+        carry_info.putString(user.key_user_last_name,
+                values.getAsString(user.key_user_last_name));
+        carry_info.putString(user.key_user_email,
+                values.getAsString(user.key_user_email));
+        carry_info.putString(user.key_user_region,
+                values.getAsString(user.key_user_region));
+        carry_info.putString("type","other");
+        show_pro.putExtra("carry_info",carry_info);
+        return show_pro;
     }
 
     private Point getScreenSize(Activity activity){

@@ -169,6 +169,8 @@ public class dbHelper extends SQLiteOpenHelper{
                 temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
                 temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
                 temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
                 user_list_listner.add(temp_v);
             }while (cursor.moveToNext());
         }
@@ -192,6 +194,8 @@ public class dbHelper extends SQLiteOpenHelper{
                 temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
                 temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
                 temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
                 temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
                 temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 user_list_artist.add(temp_v);

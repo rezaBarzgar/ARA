@@ -80,21 +80,7 @@ public class MainActivity extends AppCompatActivity {
         show_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent show_pro = new Intent(MainActivity.this, ShowProfile.class);
-                Bundle carry_info = new Bundle();
-                carry_info.putInt(user.key_user_id,
-                        preferences.getInt(user.key_user_id,0));
-                carry_info.putString(user.key_user_name,
-                        preferences.getString(user.key_user_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_first_name,
-                        preferences.getString(user.key_user_first_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_last_name,
-                        preferences.getString(user.key_user_last_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_email,
-                        preferences.getString(user.key_user_email,"NOT FOUND"));
-                carry_info.putString(user.key_user_region,
-                        preferences.getString(user.key_user_region,"NOT FOUND"));
-                show_pro.putExtra("carry_info",carry_info);
+                Intent show_pro = go_to_show_profile();
                 startActivity(show_pro);
             }
         });
@@ -161,21 +147,7 @@ public class MainActivity extends AppCompatActivity {
         show_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent show_pro = new Intent(MainActivity.this, ShowProfile.class);
-                Bundle carry_info = new Bundle();
-                carry_info.putInt(user.key_user_id,
-                        preferences.getInt(user.key_user_id,0));
-                carry_info.putString(user.key_user_name,
-                        preferences.getString(user.key_user_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_first_name,
-                        preferences.getString(user.key_user_first_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_last_name,
-                        preferences.getString(user.key_user_last_name,"NOT FOUND"));
-                carry_info.putString(user.key_user_email,
-                        preferences.getString(user.key_user_email,"NOT FOUND"));
-                carry_info.putString(user.key_user_region,
-                        preferences.getString(user.key_user_region,"NOT FOUND"));
-                show_pro.putExtra("carry_info",carry_info);
+                Intent show_pro = go_to_show_profile();
                 startActivity(show_pro);
             }
         });
@@ -586,6 +558,26 @@ public class MainActivity extends AppCompatActivity {
             db.close();
             Log.i("dbResult" , "database closed");
         }
+    }
+
+    private Intent go_to_show_profile(){
+        Intent show_pro  = new Intent(MainActivity.this, ShowProfile.class);
+        Bundle carry_info = new Bundle();
+        carry_info.putInt(user.key_user_id,
+                preferences.getInt(user.key_user_id,0));
+        carry_info.putString(user.key_user_name,
+                preferences.getString(user.key_user_name,"NOT FOUND"));
+        carry_info.putString(user.key_user_first_name,
+                preferences.getString(user.key_user_first_name,"NOT FOUND"));
+        carry_info.putString(user.key_user_last_name,
+                preferences.getString(user.key_user_last_name,"NOT FOUND"));
+        carry_info.putString(user.key_user_email,
+                preferences.getString(user.key_user_email,"NOT FOUND"));
+        carry_info.putString(user.key_user_region,
+                preferences.getString(user.key_user_region,"NOT FOUND"));
+        carry_info.putString("type","own");
+        show_pro.putExtra("carry_info",carry_info);
+        return show_pro;
     }
 
     @Override
