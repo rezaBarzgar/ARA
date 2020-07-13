@@ -205,7 +205,7 @@ public class dbHelper extends SQLiteOpenHelper{
         return user_list_artist;
     }
 
-    public List get_song(String query,String username){
+    public List get_song(String query){
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music " +
@@ -231,7 +231,7 @@ public class dbHelper extends SQLiteOpenHelper{
         return song_list;
     }
 
-    public List get_album(String query,String username){
+    public List get_album(String query){
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_have_album' as H join 'tb_album' as album on H.albumid = album.id " +
@@ -382,5 +382,47 @@ public class dbHelper extends SQLiteOpenHelper{
         if (db.isOpen()) db.close();
         return count;
     }
+
+    public String play_song(int userid,int songid){
+        String result = "";
+
+        // query needed here
+        // check for user premium ->
+        // if premium : save a record in tb_played_song and return "played"
+        // if not premium : check for users today plays ->
+        // if less than 5 : save a record in tb_played_song and return "played"
+        // else : return "you can't play any more songs today"
+
+        return result;
+    }
+
+    public String report_song(int userid,int songid){
+        String result = "";
+
+        // query needed here
+        // check that this user hasn't ever reported this song ->
+        // if not : save a record in tb_reported_song and return "reported"
+        // if yes : return "you have already reported this song" ->
+
+        return result;
+    }
+
+    public String like_song(int userid,int songid){
+        String result = "";
+
+        // should be analyzed
+
+        return result;
+    }
+
+    public String unlike_song(int userid,int songid){
+        String result = "";
+
+        // should be analyzed
+
+        return result;
+    }
+
+
 
 }

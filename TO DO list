@@ -6,28 +6,33 @@ check baray tb_playlist.number of musics
 
 + change name repeated title
 
-+Show others profile (a lot of work here)
-+popup menu for follow items
-+Upgrade to vip request or unvalid artist to valid (create 'tb_requests')
++Upgrade to vip request or invalid artist to valid (create 'tb_requests')
 +Add song to playlist (fragment or alertdialog)
-+Artists page
 
-+ suggestion for listner:(reza)
-+ add 5 latest song to artist with query (order by)
-+ find most played artist -> get genre -> add sugggested artist to home page
-+ the same as top add suggested music of the week
-+ the same as top add suggested popular music from listner plays to his home page
-+ find most song included playlist , get genre , find two random song's in that genre , add to home page
-+ add a random artist with the same region to listner
-
-+ suspicious listners who have following/follower = 5
++ suspicious listeners who have following/follower = 5
 
 +check for song insertion and change artist genre
 +if we had time add popular music otherwise perform it with real time query
 + premium expire perform within code
 
++ others page options menu (report user , ...)
 
-+artist search the same is listner except popup
-+popup : report song
+---------------------------------------------------------------------------------------
+
+reza :
 
 -table e played_songs unique boodane date esh bayad bardashte she chon kar nmikone :|
+
++ suggestion for listener:
++ add 5 latest song to artist with query (order by)
++ find most played artist -> get genre -> add suggested artist to home page
++ the same as top add suggested music of the week
++ the same as top add suggested popular music from listener plays to his home page
++ find most song included playlist , get genre , find two random song's in that genre , add to home page
++ add a random artist with the same region to listener
+
++fill queries in : dbHelper.play_song() & dbHelper.report_song()
+
+--------------------------------------------------------------------------------------
+
++should analyze together : dbHelper.like_song() & dbHelper.unlike_song()

@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
                     list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("songs")){
-                    list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    list = dbh.get_song(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("albums")){
-                    list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    list = dbh.get_album(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }
 //                else {
@@ -190,10 +190,10 @@ public class MainActivity extends AppCompatActivity {
                     list = dbh.get_users_artist(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("songs")){
-                    list = dbh.get_song(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    list = dbh.get_song(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }else if (search_for.equals("albums")){
-                    list = dbh.get_album(newText,preferences.getString(user.key_user_name,"NOT FOUND"));
+                    list = dbh.get_album(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }
 //                else {

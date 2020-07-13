@@ -140,9 +140,11 @@ public class AraAdapter extends ArrayAdapter{
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
                         if (id == R.id.popup_menu_play_song){
-
+                            Toast.makeText(activity, dbh.play_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_report_song){
-
+                            Toast.makeText(activity, dbh.report_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_go_to_artist){
 
                         }else if (id == R.id.popup_menu_go_to_album){
@@ -182,9 +184,18 @@ public class AraAdapter extends ArrayAdapter{
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
                         if (id == R.id.follower_popup_menu_show_profile){
-
+                            Intent show_pro = show_others_profile(values);
+                            activity.startActivity(show_pro);
                         }else if (id == R.id.follower_popup_menu_remove_from_followers){
-
+                            String s = dbh.unfollow_user(values.getAsInteger(user.key_user_id), userid);
+                            if (s.equals("unFollowed")){
+                                Toast.makeText(activity, "user is not following you any more",
+                                        Toast.LENGTH_SHORT).show();
+                            }else Toast.makeText(activity, "this user is not following you",
+                                    Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.follower_popup_menu_follow){
+                            Toast.makeText(activity, dbh.follow_user(userid, values.getAsInteger(user.key_user_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }
                         return false;
                     }
@@ -196,9 +207,11 @@ public class AraAdapter extends ArrayAdapter{
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
                         if (id == R.id.following_popup_menu_show_profile){
-
+                            Intent show_pro = show_others_profile(values);
+                            activity.startActivity(show_pro);
                         }else if (id == R.id.following_popup_menu_unfollow){
-
+                            Toast.makeText(activity, dbh.unfollow_user(userid, values.getAsInteger(user.key_user_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }
                         return false;
                     }
