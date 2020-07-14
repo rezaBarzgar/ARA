@@ -146,9 +146,9 @@ public class AraAdapter extends ArrayAdapter{
                             Toast.makeText(activity, dbh.report_song(userid,values.getAsInteger(Music.key_music_id))
                                     , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_go_to_artist){
-
+                            // add new func in dbHelper : find artist from songid
                         }else if (id == R.id.popup_menu_go_to_album){
-
+                            // add new func in dbHelper : find album from songid
                         }else if (id == R.id.popup_menu_like_song){
 
                         }else if (id == R.id.popup_menu_unlike_song){
@@ -168,7 +168,7 @@ public class AraAdapter extends ArrayAdapter{
                         if (id == R.id.popup_menu_play_album){
 
                         }else if (id == R.id.popup_menu_go_to_artist){
-
+                            // add new func in dbHelper : find artist from albumid
                         }else if (id == R.id.popup_menu_like_album){
 
                         }else if (id == R.id.popup_menu_unlike_album){
