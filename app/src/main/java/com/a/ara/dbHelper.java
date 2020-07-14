@@ -385,13 +385,31 @@ public class dbHelper extends SQLiteOpenHelper{
 
     public String play_song(int userid,int songid){
         String result = "";
+        int premium = -1;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("listener",null); // query
+        if (cursor.moveToFirst()){
+            premium = cursor.getInt(cursor.getColumnIndex(listner.key_premium_type));
+        }
+        cursor.close();
+        if (premium == 0){
+            String today = date_to_string(null); // my task : get yesturday date
+            cursor = db.rawQuery("",null); // count of today's records
+            if (cursor.getCount()<5){
+                if (db.isOpen()) db.close();
+                ContentValues values = new ContentValues();
+                // fill values
+                insert(values,"tb_played_song");
+                return "played";
+            }else return "you can't play any more songs today";
 
-        // query needed here
-        // check for user premium ->
-        // if premium : save a record in tb_played_song and return "played"
-        // if not premium : check for users today plays ->
-        // if less than 5 : save a record in tb_played_song and return "played"
-        // else : return "you can't play any more songs today"
+        }else if (premium>0 && premium<5){
+            if (db.isOpen()) db.close();
+            ContentValues values = new ContentValues();
+            // fill values
+            insert(values,"tb_played_song");
+            return "played";
+        }
 
         return result;
     }
@@ -410,7 +428,11 @@ public class dbHelper extends SQLiteOpenHelper{
     public String like_song(int userid,int songid){
         String result = "";
 
-        // should be analyzed
+        // check for tb_liked_songs ->
+        // if there is a record with this userid & song id : return "you already liked it"
+        // else : save a new record and return "liked"
+
+        // liked play list
 
         return result;
     }
@@ -418,8 +440,7 @@ public class dbHelper extends SQLiteOpenHelper{
     public String unlike_song(int userid,int songid){
         String result = "";
 
-        // should be analyzed
-
+//      as top
         return result;
     }
 

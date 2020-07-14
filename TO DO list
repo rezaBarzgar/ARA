@@ -21,8 +21,6 @@ check baray tb_playlist.number of musics
 
 reza :
 
--table e played_songs unique boodane date esh bayad bardashte she chon kar nmikone :|
-
 + suggestion for listener:
 + add 5 latest song to artist with query (order by)
 + find most played artist -> get genre -> add suggested artist to home page
