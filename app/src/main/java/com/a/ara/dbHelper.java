@@ -144,6 +144,33 @@ public class dbHelper extends SQLiteOpenHelper{
         return s;
     }
 
+    public String custom_date_to_string(String tag ,Date date){
+        Date d = Calendar.getInstance().getTime();
+        SimpleDateFormat day = new SimpleDateFormat("dd");
+        SimpleDateFormat month = new SimpleDateFormat("MM");
+        SimpleDateFormat year = new SimpleDateFormat("yyyy");
+        String s = "";
+
+        if (date==null) {
+            if (tag.equals("year")) {
+                s = year.format(d);
+            }else if (tag.equals("month")){
+                s = month.format(d);
+            }else if (tag.equals("day")){
+                s = day.format(d);
+            }
+        }else {
+            if (tag.equals("year")) {
+                s = year.format(date);
+            }else if (tag.equals("month")){
+                s = month.format(date);
+            }else if (tag.equals("day")){
+                s = day.format(date);
+            }
+        }
+        return s;
+    }
+
     public Date string_to_date(String s){
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
@@ -393,7 +420,16 @@ public class dbHelper extends SQLiteOpenHelper{
         }
         cursor.close();
         if (premium == 0){
-            String today = date_to_string(null); // my task : get yesturday date
+            String yesterday = "";
+            String today = custom_date_to_string("day",null);
+            String this_month = custom_date_to_string("month",null);
+            String this_year = custom_date_to_string("year",null);
+
+            int day = Integer.valueOf(today);
+            day -- ;
+            yesterday = String.valueOf(day) + "/" + this_month + "/" + this_year;
+            yesterday = date_to_string(string_to_date(yesterday));
+
             cursor = db.rawQuery("",null); // count of today's records
             if (cursor.getCount()<5){
                 if (db.isOpen()) db.close();

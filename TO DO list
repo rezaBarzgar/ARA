@@ -30,6 +30,7 @@ reza :
 + add a random artist with the same region to listener
 
 +fill queries in : dbHelper.play_song() & dbHelper.report_song()
++ yesterday for query usage placed in play_song()
 
 --------------------------------------------------------------------------------------
 
