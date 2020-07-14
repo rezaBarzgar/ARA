@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class dbHelper extends SQLiteOpenHelper{
+public class dbHelper extends SQLiteOpenHelper {
 
     private Context context;
     private static final String db_name = "ara_db";
@@ -30,7 +30,7 @@ public class dbHelper extends SQLiteOpenHelper{
             " 'email' TEXT ," +
             " 'region' TEXT ," +
             " 'question' TEXT ," +
-            " 'answer' TEXT )" ;
+            " 'answer' TEXT )";
 
 //    private final String cmd2 = "CREATE TABLE IF NOT EXISTS 'TEST' ('name' TEXT , 'phone' INTEGER);";
 
@@ -62,7 +62,7 @@ public class dbHelper extends SQLiteOpenHelper{
     private final String cmd11 = "CREATE TABLE IF NOT EXISTS 'tb_liked_playlist'('userid' integer,'playlistid' integer ," +
             " 'like_date' date ,foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
 
-    private final String cmd12 = "CREATE TABLE IF NOT EXISTS 'tb_played_song'('userid' integer not null, 'musicid' integer not null,"+"" +
+    private final String cmd12 = "CREATE TABLE IF NOT EXISTS 'tb_played_song'('userid' integer not null, 'musicid' integer not null," + "" +
             "'played_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), primary key (played_date) )";
 
     private final String cmd13 = "CREATE TABLE IF NOT EXISTS 'tb_reported_song'('userid' integer not null, 'musicid' integer not null," +
@@ -80,7 +80,7 @@ public class dbHelper extends SQLiteOpenHelper{
     private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
             " 'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
 
-    public dbHelper(Context context,String tableName) {
+    public dbHelper(Context context, String tableName) {
         super(context, db_name, null, 1);
         this.context = context;
 //        this.tablename = tableName;
@@ -110,68 +110,68 @@ public class dbHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ tablename);
+        db.execSQL("DROP TABLE IF EXISTS " + tablename);
         db.execSQL("DROP TABLE IF EXISTS 'tb_listner'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_artist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_music'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_follow'");
-        Log.i("dbResult","table dropped");
+        Log.i("dbResult", "table dropped");
         onCreate(db);
     }
 
-    public void insert(ContentValues values,String tb_name){
+    public void insert(ContentValues values, String tb_name) {
         SQLiteDatabase db = getWritableDatabase();
-        long insertid = db.insert(tb_name,null,values);
-        if (insertid == -1){
-            Log.i("insertion","fucked with id : "+insertid);
-        }else {
-            Log.i("insertion","inserted with id : "+insertid);
+        long insertid = db.insert(tb_name, null, values);
+        if (insertid == -1) {
+            Log.i("insertion", "fucked with id : " + insertid);
+        } else {
+            Log.i("insertion", "inserted with id : " + insertid);
         }
-        if (db.isOpen())db.close();
+        if (db.isOpen()) db.close();
     }
 
-    public String date_to_string(Date date){
+    public String date_to_string(Date date) {
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String s = "";
-        if (date==null) {
+        if (date == null) {
             s = format.format(d);
-        }else {
+        } else {
             s = format.format(date);
         }
         return s;
     }
 
-    public String custom_date_to_string(String tag ,Date date){
+    public String custom_date_to_string(String tag, Date date) {
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat day = new SimpleDateFormat("dd");
         SimpleDateFormat month = new SimpleDateFormat("MM");
         SimpleDateFormat year = new SimpleDateFormat("yyyy");
         String s = "";
 
-        if (date==null) {
+        if (date == null) {
             if (tag.equals("year")) {
                 s = year.format(d);
-            }else if (tag.equals("month")){
+            } else if (tag.equals("month")) {
                 s = month.format(d);
-            }else if (tag.equals("day")){
+            } else if (tag.equals("day")) {
                 s = day.format(d);
             }
-        }else {
+        } else {
             if (tag.equals("year")) {
                 s = year.format(date);
-            }else if (tag.equals("month")){
+            } else if (tag.equals("month")) {
                 s = month.format(date);
-            }else if (tag.equals("day")){
+            } else if (tag.equals("day")) {
                 s = day.format(date);
             }
         }
         return s;
     }
 
-    public Date string_to_date(String s){
+    public Date string_to_date(String s) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;
         try {
@@ -182,153 +182,153 @@ public class dbHelper extends SQLiteOpenHelper{
         return date;
     }
 
-    public List get_users_listner(String query,String username){
+    public List get_users_listner(String query, String username) {
         SQLiteDatabase db = getReadableDatabase();
         List user_list_listner = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_users' where userid<1999 and" +
                 " (firstname like '%" + query + "%' or lastname like '%" + query + "%'" +
-                " or username like '" + query + "%') and not username='" + username + "'",null);
-        if (cursor.moveToFirst()){
+                " or username like '" + query + "%') and not username='" + username + "'", null);
+        if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
-                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
-                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
-                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
-                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
-                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
-                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
+                temp_v.put(user.key_user_id, cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_name, cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_first_name, cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name, cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_email, cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region, cursor.getString(cursor.getColumnIndex(user.key_user_region)));
                 user_list_listner.add(temp_v);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        if (db.isOpen())db.close();
+        if (db.isOpen()) db.close();
         return user_list_listner;
     }
 
-    public List get_users_artist(String query,String username){
+    public List get_users_artist(String query, String username) {
         SQLiteDatabase db = getReadableDatabase();
         List user_list_artist = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_users' as U left join 'tb_artist' as A " +
                 "on U.userid = A.userid where U.userid between 2000 and 2999 and " +
                 "(U.firstname like '%" + query + "%' or U.lastname like '%" + query + "%' " +
                 "or U.username like '%" + query + "%' or A.nickname like '%" + query + "%') " +
-                "and not U.username = '" + username + "'",null);
-        if (cursor.moveToFirst()){
+                "and not U.username = '" + username + "'", null);
+        if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
-                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
-                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
-                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
-                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
-                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
-                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
-                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-                temp_v.put(artist.key_genre,cursor.getString(cursor.getColumnIndex(artist.key_genre)));
+                temp_v.put(user.key_user_id, cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_name, cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_first_name, cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name, cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_email, cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region, cursor.getString(cursor.getColumnIndex(user.key_user_region)));
+                temp_v.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(artist.key_genre, cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 user_list_artist.add(temp_v);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        if (db.isOpen())db.close();
+        if (db.isOpen()) db.close();
         return user_list_artist;
     }
 
-    public List get_song(String query){
+    public List get_song(String query) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music " +
                 "on music.id = have_album.musicid " +
                 "left join 'tb_artist' as artist_b on have_album.userid = artist_b.userid " +
-                "left join 'tb_album' as album on album.id = have_album.albumid "  +
-                "where music.title like '" + query + "%'",null);
-        if (cursor.moveToFirst()){
+                "left join 'tb_album' as album on album.id = have_album.albumid " +
+                "where music.title like '" + query + "%'", null);
+        if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
-                temp_v.put(Music.key_music_id,cursor.getInt(cursor.getColumnIndex(Music.key_music_id)));
-                temp_v.put(Music.key_music_duration,cursor.getString(cursor.getColumnIndex(Music.key_music_duration)));
-                temp_v.put(Music.key_music_genre,cursor.getString(cursor.getColumnIndex(Music.key_music_genre)));
-                temp_v.put(Music.key_music_title,cursor.getString(cursor.getColumnIndex(Music.key_music_title)));
-                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-                temp_v.put(Album.key_title,cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                temp_v.put(Music.key_music_id, cursor.getInt(cursor.getColumnIndex(Music.key_music_id)));
+                temp_v.put(Music.key_music_duration, cursor.getString(cursor.getColumnIndex(Music.key_music_duration)));
+                temp_v.put(Music.key_music_genre, cursor.getString(cursor.getColumnIndex(Music.key_music_genre)));
+                temp_v.put(Music.key_music_title, cursor.getString(cursor.getColumnIndex(Music.key_music_title)));
+                temp_v.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
 
                 song_list.add(temp_v);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        if (db.isOpen())db.close();
+        if (db.isOpen()) db.close();
         return song_list;
     }
 
-    public List get_album(String query){
+    public List get_album(String query) {
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();
         Cursor cursor = db.rawQuery("select * from 'tb_have_album' as H join 'tb_album' as album on H.albumid = album.id " +
-                "join 'tb_artist' as artist_b on H.userid = artist_b.userid "  +
-                "where album.title like '"+query+"%'",null);
-        if (cursor.moveToFirst()){
+                "join 'tb_artist' as artist_b on H.userid = artist_b.userid " +
+                "where album.title like '" + query + "%'", null);
+        if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
-                temp_v.put(Album.key_id,cursor.getInt(cursor.getColumnIndex(Album.key_id)));
-                temp_v.put(Album.key_title,cursor.getString(cursor.getColumnIndex(Album.key_title)));
-                temp_v.put(Album.key_genre,cursor.getString(cursor.getColumnIndex(Album.key_genre)));
-                temp_v.put(Album.key_publish_date,cursor.getString(cursor.getColumnIndex(Album.key_publish_date)));
-                temp_v.put(artist.key_nickname,cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+                temp_v.put(Album.key_id, cursor.getInt(cursor.getColumnIndex(Album.key_id)));
+                temp_v.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                temp_v.put(Album.key_genre, cursor.getString(cursor.getColumnIndex(Album.key_genre)));
+                temp_v.put(Album.key_publish_date, cursor.getString(cursor.getColumnIndex(Album.key_publish_date)));
+                temp_v.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
                 album_list.add(temp_v);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        if (db.isOpen())db.close();
+        if (db.isOpen()) db.close();
         return album_list;
     }
 
-    public List get_follow_items(String which,int userid){
+    public List get_follow_items(String which, int userid) {
         SQLiteDatabase db = getReadableDatabase();
         List result = new ArrayList();
         Cursor cursor;
         Cursor user_cursor;
         int id;
 
-        if (which.equals("followers")){
+        if (which.equals("followers")) {
             cursor = db.rawQuery("select * from 'tb_follow' where " +
-                    "followerid=" + String.valueOf(userid),null);
+                    "followerid=" + String.valueOf(userid), null);
 
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     ContentValues values = new ContentValues();
                     id = cursor.getInt(cursor.getColumnIndex("followingid"));
                     user_cursor = db.rawQuery("select * from 'tb_users' where userid=" +
-                            String.valueOf(id),null);
+                            String.valueOf(id), null);
 
-                    if (user_cursor.moveToFirst()){
-                        values.put(user.key_user_id,user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
-                        values.put(user.key_user_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
-                        values.put(user.key_user_first_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
-                        values.put(user.key_user_last_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
+                    if (user_cursor.moveToFirst()) {
+                        values.put(user.key_user_id, user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
+                        values.put(user.key_user_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
+                        values.put(user.key_user_first_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
+                        values.put(user.key_user_last_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
                         result.add(values);
                     }
                     user_cursor.close(); // *******
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
             cursor.close();
-        }else if (which.equals("followings")){
+        } else if (which.equals("followings")) {
             cursor = db.rawQuery("select * from 'tb_follow' where " +
-                    "followingid=" + String.valueOf(userid),null);
+                    "followingid=" + String.valueOf(userid), null);
 
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     ContentValues values = new ContentValues();
                     id = cursor.getInt(cursor.getColumnIndex("followerid"));
                     user_cursor = db.rawQuery("select * from 'tb_users' where userid=" +
-                            String.valueOf(id),null);
+                            String.valueOf(id), null);
 
-                    if (user_cursor.moveToFirst()){
-                        values.put(user.key_user_id,user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
-                        values.put(user.key_user_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
-                        values.put(user.key_user_first_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
-                        values.put(user.key_user_last_name,user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
+                    if (user_cursor.moveToFirst()) {
+                        values.put(user.key_user_id, user_cursor.getInt(user_cursor.getColumnIndex(user.key_user_id)));
+                        values.put(user.key_user_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_name)));
+                        values.put(user.key_user_first_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_first_name)));
+                        values.put(user.key_user_last_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
                         result.add(values);
                     }
                     user_cursor.close(); // *******
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
             cursor.close();
         }
@@ -337,71 +337,56 @@ public class dbHelper extends SQLiteOpenHelper{
         return result;
     }
 
-    public String follow_user(int following_id,int follower_id){
+    public String follow_user(int following_id, int follower_id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
                 + String.valueOf(following_id) + " and followerid="
-                + String.valueOf(follower_id),null);
+                + String.valueOf(follower_id), null);
 
-        if (cursor.getCount()>0){
+        if (cursor.getCount() > 0) {
             return "you are already following this user";
-        }else {
+        } else {
             cursor.close();
-            if (db.isOpen())db.close();
+            if (db.isOpen()) db.close();
             db = getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("followingid",following_id);
-            values.put("followerid",follower_id);
-            values.put("follow_date",date_to_string(null));
-            long insertid = db.insert("tb_follow",null,values);
-            if (insertid == -1){
+            values.put("followingid", following_id);
+            values.put("followerid", follower_id);
+            values.put("follow_date", date_to_string(null));
+            long insertid = db.insert("tb_follow", null, values);
+            if (insertid == -1) {
                 return "Failed";
-            }else return "Followed";
+            } else return "Followed";
         }
     }
 
-    public String unfollow_user(int following_id,int follower_id){
+    public String unfollow_user(int following_id, int follower_id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from 'tb_follow' where followingid="
                 + String.valueOf(following_id) + " and followerid="
-                + String.valueOf(follower_id),null);
+                + String.valueOf(follower_id), null);
 
-        if (cursor.getCount()==0){
+        if (cursor.getCount() == 0) {
             return "you are not following this user";
-        }else {
+        } else {
             cursor.close();
-            if (db.isOpen())db.close();
+            if (db.isOpen()) db.close();
             db = getWritableDatabase();
-            long deleteid = db.delete("tb_follow","followingid =" + String.valueOf(following_id) +
-                    " and followerid =" + String.valueOf(follower_id),null);
-            if (deleteid== -1){
+            long deleteid = db.delete("tb_follow", "followingid =" + String.valueOf(following_id) +
+                    " and followerid =" + String.valueOf(follower_id), null);
+            if (deleteid == -1) {
                 return "Failed";
-            }else return "unFollowed";
+            } else return "unFollowed";
         }
     }
 
-    public int show_followers_count(int userid){
+    public int show_followers_count(int userid) {
         int count = 0;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select count(*) from 'tb_follow' where " +
-                "followerid=" + String.valueOf(userid),null);
+                "followerid=" + String.valueOf(userid), null);
 
-        if (cursor.moveToFirst()){
-                count = cursor.getInt(0);
-        }
-
-        cursor.close();
-        if (db.isOpen()) db.close();
-        return count;
-    }
-
-    public int show_following_count(int userid){
-        int count = 0;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(*) from 'tb_follow' where " +
-                "followingid=" + String.valueOf(userid),null);
-
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
         }
 
@@ -410,76 +395,135 @@ public class dbHelper extends SQLiteOpenHelper{
         return count;
     }
 
-    public String play_song(int userid,int songid){
+    public int show_following_count(int userid) {
+        int count = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_follow' where " +
+                "followingid=" + String.valueOf(userid), null);
+
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+
+        cursor.close();
+        if (db.isOpen()) db.close();
+        return count;
+    }
+
+    public String play_song(int userid, int musicid) {
         String result = "";
         int premium = -1;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("listener",null); // query
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.rawQuery("select premium_type from 'tb_listner' as listner " +
+                "where listner.userid = "+ Integer.toString(userid), null);
+        if (cursor.moveToFirst()) {
             premium = cursor.getInt(cursor.getColumnIndex(listner.key_premium_type));
         }
         cursor.close();
-        if (premium == 0){
+        if (premium == 0) {
             String yesterday = "";
-            String today = custom_date_to_string("day",null);
-            String this_month = custom_date_to_string("month",null);
-            String this_year = custom_date_to_string("year",null);
+            String today = custom_date_to_string("day", null);
+            String this_month = custom_date_to_string("month", null);
+            String this_year = custom_date_to_string("year", null);
 
             int day = Integer.valueOf(today);
-            day -- ;
+            day--;
             yesterday = String.valueOf(day) + "/" + this_month + "/" + this_year;
             yesterday = date_to_string(string_to_date(yesterday));
 
-            cursor = db.rawQuery("",null); // count of today's records
-            if (cursor.getCount()<5){
+            cursor = db.rawQuery("SELECT count(musicid) FROM 'tb_played_song' as PL " +
+                    "where PL.userid = " + Integer.toString(userid) + " and PL.played_date > " + yesterday, null); // count of today's records
+            cursor.moveToFirst();
+            if (cursor.getInt(cursor.getColumnIndex("musicid")) < 5) {
                 if (db.isOpen()) db.close();
                 ContentValues values = new ContentValues();
-                // fill values
-                insert(values,"tb_played_song");
+                values.put(user.key_user_id, userid);
+                values.put(Music.key_music_id,musicid);
+                values.put("played_date",date_to_string(null));
+                insert(values, "tb_played_song");
                 return "played";
-            }else return "you can't play any more songs today";
+            } else return "you can't play any more songs today";
 
-        }else if (premium>0 && premium<5){
+        } else if (premium > 0 && premium < 5) {
             if (db.isOpen()) db.close();
             ContentValues values = new ContentValues();
-            // fill values
-            insert(values,"tb_played_song");
+            values.put(user.key_user_id, userid);
+            values.put(Music.key_music_id,musicid);
+            values.put("played_date",date_to_string(null));
+            insert(values, "tb_played_song");
             return "played";
         }
 
         return result;
     }
 
-    public String report_song(int userid,int songid){
+    public String report_song(int userid, int musicid) {
         String result = "";
-
-        // query needed here
-        // check that this user hasn't ever reported this song ->
-        // if not : save a record in tb_reported_song and return "reported"
-        // if yes : return "you have already reported this song" ->
+        int report_state = -1 ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(userid) from 'tb_reported_song' " +
+                "where userid = "+Integer.toString(userid)+" and musicid ="+Integer.toString(musicid), null);
+        if(cursor.moveToFirst()){
+            report_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+        }
+        if(report_state == 1){
+            return  "you have already reported this song";
+        }else if(report_state == 0){
+            if (db.isOpen()) db.close();
+            ContentValues values = new ContentValues();
+            values.put(user.key_user_id, userid);
+            values.put(Music.key_music_id,musicid);
+            values.put("report_date",date_to_string(null));
+            insert(values, "tb_reported_song");
+            return "reported";
+        }
 
         return result;
     }
 
-    public String like_song(int userid,int songid){
+    public String like_song(int userid, int musicid) {
         String result = "";
+        int like_state = -1 ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(userid) from 'tb_liked_music' " +
+                "where userid = "+Integer.toString(userid)+" and musicid = "+Integer.toString(musicid), null);
+        if(cursor.moveToFirst()){
+            like_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+        }
+        if (like_state == 0){
+            if (db.isOpen()) db.close();
+            ContentValues values = new ContentValues();
+            values.put(user.key_user_id, userid);
+            values.put(Music.key_music_id,musicid);
+            values.put("liked_date",date_to_string(null));
+            insert(values, "tb_liked_music");
+            return "liked";
+        }else if (like_state == 1)return "you already liked it";
 
-        // check for tb_liked_songs ->
-        // if there is a record with this userid & song id : return "you already liked it"
-        // else : save a new record and return "liked"
-
-        // liked play list
 
         return result;
     }
 
-    public String unlike_song(int userid,int songid){
+    public String unlike_song(int userid, int musicid) {
         String result = "";
-
+        int like_state = -1 ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(userid) from 'tb_liked_music' " +
+                "where userid = "+Integer.toString(userid)+" and musicid = "+Integer.toString(musicid), null);
+        if(cursor.moveToFirst()){
+            like_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+        }
+        if (db.isOpen()) db.close();
+        if (like_state == 1){
+            /*
+            * nmidonam chejoori query delete ro benevism too java :D
+            * DELETE FROM 'tb_liked_music' where userid= userid and musicid = musicid
+            * */
+            return "unliked";
+        }else if(like_state == 0) return "you dont even liked that!";
 //      as top
         return result;
     }
-
 
 
 }
