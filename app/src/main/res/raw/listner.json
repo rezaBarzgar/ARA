@@ -1,0 +1,302 @@
+[
+        {
+            "userid": "1001",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "21/2/1990"
+        },
+        {
+            "userid": "1002",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "29/10/1987"
+        },
+        {
+            "userid": "1003",
+            "premium_type": "1",
+            "premium_trail": "7/11/20",
+            "birth_date": "2/2/02"
+        },
+        {
+            "userid": "1004",
+            "premium_type": "1",
+            "premium_trail": "1/10/20",
+            "birth_date": "3/12/05"
+        },
+        {
+            "userid": "1005",
+            "premium_type": "2",
+            "premium_trail": "28/9/2020",
+            "birth_date": "16/7/2000"
+        },
+        {
+            "userid": "1006",
+            "premium_type": "3",
+            "premium_trail": "11/7/20",
+            "birth_date": "17/8/1998"
+        },
+        {
+            "userid": "1007",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "22/04/1946"
+        },
+        {
+            "userid": "1008",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "12/5/49"
+        },
+        {
+            "userid": "1009",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "31/12/1949"
+        },
+        {
+            "userid": "1010",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "23/11/1956"
+        },
+        {
+            "userid": "1011",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "6/12/56"
+        },
+        {
+            "userid": "1012",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "20/08/1966"
+        },
+        {
+            "userid": "1013",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "20/09/1971"
+        },
+        {
+            "userid": "1014",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "19/07/1973"
+        },
+        {
+            "userid": "1015",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "28/12/1974"
+        },
+        {
+            "userid": "1016",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "4/2/76"
+        },
+        {
+            "userid": "1017",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "9/11/76"
+        },
+        {
+            "userid": "1018",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "14/09/1982"
+        },
+        {
+            "userid": "1019",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "10/3/88"
+        },
+        {
+            "userid": "1020",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "24/03/1989"
+        },
+        {
+            "userid": "1021",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "17/05/1991"
+        },
+        {
+            "userid": "1022",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "14/11/1991"
+        },
+        {
+            "userid": "1023",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "1/6/94"
+        },
+        {
+            "userid": "1024",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "1/8/00"
+        },
+        {
+            "userid": "1025",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "15/09/2004"
+        },
+        {
+            "userid": "1026",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "28/09/2010"
+        },
+        {
+            "userid": "1027",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "19/10/1980"
+        },
+        {
+            "userid": "1028",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "24/04/1981"
+        },
+        {
+            "userid": "1029",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "21/06/1983"
+        },
+        {
+            "userid": "1030",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "14/08/1983"
+        },
+        {
+            "userid": "1031",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "29/08/1984"
+        },
+        {
+            "userid": "1032",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "12/1/85"
+        },
+        {
+            "userid": "1033",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "3/11/85"
+        },
+        {
+            "userid": "1034",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "18/03/1986"
+        },
+        {
+            "userid": "1035",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "5/7/87"
+        },
+        {
+            "userid": "1036",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "9/8/89"
+        },
+        {
+            "userid": "1037",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "18/05/1991"
+        },
+        {
+            "userid": "1038",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "6/5/92"
+        },
+        {
+            "userid": "1039",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "7/5/92"
+        },
+        {
+            "userid": "1040",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "26/01/1993"
+        },
+        {
+            "userid": "1041",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "9/6/94"
+        },
+        {
+            "userid": "1042",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "26/03/1995"
+        },
+        {
+            "userid": "1043",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "13/05/1996"
+        },
+        {
+            "userid": "1044",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "25/02/1997"
+        },
+        {
+            "userid": "1045",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "7/3/98"
+        },
+        {
+            "userid": "1046",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "30/03/2000"
+        },
+        {
+            "userid": "1047",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "16/06/2000"
+        },
+        {
+            "userid": "1048",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "29/09/2002"
+        },
+        {
+            "userid": "1049",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "17/12/2002"
+        },
+        {
+            "userid": "1050",
+            "premium_type": "0",
+            "premium_trail": "null",
+            "birth_date": "30/11/2004"
+        }
+]

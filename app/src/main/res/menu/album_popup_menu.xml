@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="play"
+        android:id="@+id/popup_menu_play_album"/>
+    <item android:title="go to artist"
+        android:id="@+id/popup_menu_go_to_artist"/>
+    <item android:title="like"
+        android:id="@+id/popup_menu_like_album"/>
+    <item android:title="unlike"
+        android:id="@+id/popup_menu_unlike_album"/>
+
+</menu>

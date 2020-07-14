@@ -1,0 +1,177 @@
+[
+  {
+    "userid": "2001",
+    "genre": "pop",
+    "career_start_date": "1984",
+    "valid": "1",
+    "nickname": "david guttea"
+  },
+  {
+    "userid": "2002",
+    "genre": "pop",
+    "career_start_date": "2004",
+    "valid": "1",
+    "nickname": "John Legend"
+  },
+  {
+    "userid": "2003",
+    "genre": "hip hop",
+    "career_start_date": "2014",
+    "valid": "1",
+    "nickname": "ella mai"
+  },
+  {
+    "userid": "2004",
+    "genre": "rock",
+    "career_start_date": "2009",
+    "valid": "1",
+    "nickname": "twenty one pilots"
+  },
+  {
+    "userid": "2005",
+    "genre": "pop",
+    "career_start_date": "2006",
+    "valid": "1",
+    "nickname": "selena gomez"
+  },
+  {
+    "userid": "2006",
+    "genre": "hip hop",
+    "career_start_date": "2007",
+    "valid": "1",
+    "nickname": "tyga"
+  },
+  {
+    "userid": "2007",
+    "genre": "pop",
+    "career_start_date": "1997",
+    "valid": "1",
+    "nickname": "beyonce"
+  },
+  {
+    "userid": "2008",
+    "genre": "pop",
+    "career_start_date": "2003",
+    "valid": "1",
+    "nickname": "Miley Cyrus"
+  },
+  {
+    "userid": "2009",
+    "genre": "pop",
+    "career_start_date": "1999",
+    "valid": "1",
+    "nickname": "katy perry"
+  },
+  {
+    "userid": "2010",
+    "genre": "pop",
+    "career_start_date": "1982",
+    "valid": "1",
+    "nickname": "maddona"
+  },
+  {
+    "userid": "2011",
+    "genre": "hip hop",
+    "career_start_date": "2009",
+    "valid": "1",
+    "nickname": "Kodak Black"
+  },
+  {
+    "userid": "2012",
+    "genre": "pop",
+    "career_start_date": "2011",
+    "valid": "1",
+    "nickname": "iggy azalea"
+  },
+  {
+    "userid": "2013",
+    "genre": "pop",
+    "career_start_date": "2002",
+    "valid": "1",
+    "nickname": "Kelly Clarkson"
+  },
+  {
+    "userid": "2014",
+    "genre": "hip hop",
+    "career_start_date": "2003",
+    "valid": "1",
+    "nickname": "Akon"
+  },
+  {
+    "userid": "2015",
+    "genre": "pop",
+    "career_start_date": "1998",
+    "valid": "1",
+    "nickname": "p!nk"
+  },
+  {
+    "userid": "2016",
+    "genre": "pop",
+    "career_start_date": "2010",
+    "valid": "1",
+    "nickname": "Ed Sheeran"
+  },
+  {
+    "userid": "2017",
+    "genre": "hip hop",
+    "career_start_date": "1996",
+    "valid": "1",
+    "nickname": "eminem"
+  },
+  {
+    "userid": "2018",
+    "genre": "hip hop",
+    "career_start_date": "1996",
+    "valid": "1",
+    "nickname": "50 Cent"
+  },
+  {
+    "userid": "2019",
+    "genre": "pop",
+    "career_start_date": "2009",
+    "valid": "1",
+    "nickname": "Charlie  puth"
+  },
+  {
+    "userid": "2020",
+    "genre": "rock",
+    "career_start_date": "2002",
+    "valid": "1",
+    "nickname": "arctick monkeys"
+  },
+  {
+    "userid": "2021",
+    "genre": "folk",
+    "career_start_date": "1959",
+    "valid": "1",
+    "nickname": "mohammad reza shajarian"
+  },
+  {
+    "userid": "2022",
+    "genre": "metal",
+    "career_start_date": "1967",
+    "valid": "1",
+    "nickname": "ozzy"
+  },
+  {
+    "userid": "2023",
+    "genre": "metal",
+    "career_start_date": "1969",
+    "valid": "1",
+    "nickname": "rob halford"
+  },
+  {
+    "userid": "2024",
+    "genre": "metal",
+    "career_start_date": "1984",
+    "valid": "1",
+    "nickname": "chris cornell"
+  },
+  {
+    "userid": "2025",
+    "genre": "pop",
+    "career_start_date": "2003",
+    "valid": "1",
+    "nickname": "Taylor Swift"
+  }
+]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="follow" android:id="@+id/popup_menu_follow_artist"/>
+
+    <item android:title="unfollow" android:id="@+id/popup_menu_unfollow_artist"/>
+
+    <item android:title="show profile" android:id="@+id/popup_menu_profile_artist"/>
+
+</menu>

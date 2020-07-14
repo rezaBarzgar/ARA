@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="show profile"
+        android:id="@+id/follower_popup_menu_show_profile"/>
+    <item android:title="remove from your followers"
+        android:id="@+id/follower_popup_menu_remove_from_followers"/>
+    <item android:title="follow"
+        android:id="@+id/follower_popup_menu_follow"/>
+</menu>
