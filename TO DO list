@@ -35,3 +35,4 @@ reza :
 --------------------------------------------------------------------------------------
 
 +should analyze together : dbHelper.like_song() & dbHelper.unlike_song()
+test
