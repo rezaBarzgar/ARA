@@ -707,7 +707,7 @@ public class dbHelper extends SQLiteOpenHelper {
             }while (cursor.moveToNext());
         }else result = "not founded suggested music";
         return result;
-    }
+    }//sug
 
     public String sug_music_based_on_playlist(int userid) {
         String result = "";
