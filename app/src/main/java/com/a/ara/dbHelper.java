@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class dbHelper extends SQLiteOpenHelper {
 
@@ -626,4 +627,106 @@ public class dbHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    public String sug_another_artist(int userid) {
+        String result;
+        String artist_id = "";
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A " +
+                "on played.musicid join 'tb_artist' as artist on A.userid = artist.userid " +
+                "where played.userid = " + String.valueOf(userid) +
+                "group by artist.userid limit 1 ", null);
+        if (cursor.moveToFirst()) {
+            artist_id = String.valueOf(cursor.getInt(0));
+        }
+
+        cursor = db.rawQuery("select artist.nickname from 'tb_artist' as artist " +
+                "where not artist.userid = " + artist_id +
+                "limit 1", null);
+        if (cursor.moveToFirst()) {
+            result = cursor.getString(0);
+        } else {
+            result = "not founded suggested artist";
+        }
+
+        return result;
+    }
+
+    public String sug_popular_songs_of_week() {
+        String result = "songs of the week : ";
+        String thisweek = "";
+        String today = custom_date_to_string("day", null);
+        String this_month = custom_date_to_string("month", null);
+        String this_year = custom_date_to_string("year", null);
+
+        int day = Integer.valueOf(today);
+        day = day - 7;
+        if (day <= 0) day = 1;
+        thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year;
+        thisweek = date_to_string(string_to_date(thisweek));
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select music.title,count(*) from 'tb_played_song' as played join " +
+                "'tb_music' as music on music.id = played.musicid " +
+                "where played.played_date > " + thisweek +
+                "group by music.title " +
+                "limit 5", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                result = result + cursor.getString(cursor.getColumnIndex(Music.key_music_title)) + " ";
+            } while (cursor.moveToNext());
+
+        }
+
+        return result;
+    }
+
+    public String sug_music_based_on_playes_genre(int userid) {
+        String result = "suggested songs : ";
+        String genre_name = "";
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select music.genre, count(*) as cnt from 'tb_played_song' as played " +
+                "join 'tb_music' as music on music.id = played.musicid " +
+                "where played.userid = " + String.valueOf(userid) +
+                "group by music.genre " +
+                "order by cnt desc " +
+                "limit 1", null);
+        if (cursor.moveToFirst()) {
+            genre_name = cursor.getString(0);
+        }
+        cursor = db.rawQuery("select music.title from 'tb_music' as music " +
+                "where music.genre = " + genre_name + " and music.id not in ( " +
+                "select played.musicid from 'tb_played_song' as played " +
+                "where played.userid = " + String.valueOf(userid) +
+                ") limit 5", null);
+
+        if (cursor.moveToFirst()){
+            do {
+                result = result + cursor.getString(0);
+            }while (cursor.moveToNext());
+        }else result = "not founded suggested music";
+        return result;
+    }
+
+    public String sug_music_based_on_playlist(int userid) {
+        String result = "";
+
+
+        return result;
+    }     // sug 4
+
+    public String sug_same_region_artist(int userid) {
+        String result = "";
+
+
+        return result;
+    }     // sug 5
+
+    public String check_for_premium_end(int userid) {
+        String result = "";
+
+        return result;
+    }
 }

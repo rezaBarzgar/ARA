@@ -31,9 +31,17 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -682,44 +690,6 @@ public class MainActivity extends AppCompatActivity {
         else return false;
     }
 
-    public String check_for_premium_end(int userid){
-        String result = "";
 
-        return result;
-    }
-
-    public String sug_another_artist(int userid){
-        String result = "";
-
-        return result;
-    } // sug 1
-
-    public String sug_popular_song_of_week(){
-        String result = "";
-
-
-        return result;
-    }     // sug 2
-
-    public String sug_music_based_on_playes_genre(int userid){
-        String result = "";
-
-
-        return result;
-    }     // sug 3
-
-    public String sug_music_based_on_playlist(int userid){
-        String result = "";
-
-
-        return result;
-    }     // sug 4
-
-    public String sug_same_region_artist(int userid){
-        String result = "";
-
-
-        return result;
-    }     // sug 5
 
 }
