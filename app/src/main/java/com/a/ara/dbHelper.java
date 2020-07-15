@@ -63,13 +63,16 @@ public class dbHelper extends SQLiteOpenHelper {
             " 'like_date' date ,foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
 
     private final String cmd12 = "CREATE TABLE IF NOT EXISTS 'tb_played_song'('userid' integer not null, 'musicid' integer not null," + "" +
-            "'played_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), primary key (played_date) )";
+            "'played_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id)," +
+            " primary key (userid,musicid,played_date) )";
 
     private final String cmd13 = "CREATE TABLE IF NOT EXISTS 'tb_reported_song'('userid' integer not null, 'musicid' integer not null," +
-            "'report_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id))";
+            "'report_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id)," +
+            " primary key(userid,musicid))";
 
     private final String cmd14 = "CREATE TABLE IF NOT EXISTS 'tb_liked_music'('userid' integer not null, 'musicid' integer not null," +
-            "'liked_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id))";
+            "'liked_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id)," +
+            " primary key(userid,musicid))";
 
     private final String cmd15 = "CREATE TABLE IF NOT EXISTS 'tb_liked_album'('userid' integer not null, 'albumid' integer not null," +
             "foreign key(userid) references tb_users(userid),foreign key(albumid) references tb_album(id))";
@@ -117,6 +120,9 @@ public class dbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS 'tb_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_follow'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_played_song'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_reported_song'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_liked_music'");
         Log.i("dbResult", "table dropped");
         onCreate(db);
     }
@@ -132,9 +138,29 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
     }
 
+    public int delete(String tablename,String where_clause){
+        int count;
+        SQLiteDatabase db = getWritableDatabase();
+        count = db.delete(tablename,where_clause,null );
+        if (db.isOpen()) db.close();
+        return count;
+    }
+
     public String date_to_string(Date date) {
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String s = "";
+        if (date == null) {
+            s = format.format(d);
+        } else {
+            s = format.format(date);
+        }
+        return s;
+    }
+
+    public String date_to_string_without_time(Date date) {
+        Date d = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String s = "";
         if (date == null) {
             s = format.format(d);
@@ -414,8 +440,8 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "";
         int premium = -1;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select premium_type from 'tb_listner' as listner " +
-                "where listner.userid = "+ Integer.toString(userid), null);
+        Cursor cursor = db.rawQuery("select * from 'tb_listner' as listner " +
+                "where listner.userid = "+ String.valueOf(userid), null);
         if (cursor.moveToFirst()) {
             premium = cursor.getInt(cursor.getColumnIndex(listner.key_premium_type));
         }
@@ -431,15 +457,15 @@ public class dbHelper extends SQLiteOpenHelper {
             yesterday = String.valueOf(day) + "/" + this_month + "/" + this_year;
             yesterday = date_to_string(string_to_date(yesterday));
 
-            cursor = db.rawQuery("SELECT count(musicid) FROM 'tb_played_song' as PL " +
-                    "where PL.userid = " + Integer.toString(userid) + " and PL.played_date > " + yesterday, null); // count of today's records
+            cursor = db.rawQuery("SELECT * FROM 'tb_played_song' as PL " +
+                    "where PL.userid = " + String.valueOf(userid) + " and PL.played_date > '" + yesterday + "'", null);
             cursor.moveToFirst();
-            if (cursor.getInt(cursor.getColumnIndex("musicid")) < 5) {
+            if (cursor.getCount() < 5) {
                 if (db.isOpen()) db.close();
                 ContentValues values = new ContentValues();
                 values.put(user.key_user_id, userid);
-                values.put(Music.key_music_id,musicid);
-                values.put("played_date",date_to_string(null));
+                values.put("musicid",musicid);
+                values.put("played_date",date_to_string_without_time(null));
                 insert(values, "tb_played_song");
                 return "played";
             } else return "you can't play any more songs today";
@@ -461,10 +487,10 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "";
         int report_state = -1 ;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(userid) from 'tb_reported_song' " +
-                "where userid = "+Integer.toString(userid)+" and musicid ="+Integer.toString(musicid), null);
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_reported_song' " +
+                "where userid = "+String.valueOf(userid)+" and musicid ="+String.valueOf(musicid), null);
         if(cursor.moveToFirst()){
-            report_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+            report_state = cursor.getInt(0);
         }
         if(report_state == 1){
             return  "you have already reported this song";
@@ -472,7 +498,7 @@ public class dbHelper extends SQLiteOpenHelper {
             if (db.isOpen()) db.close();
             ContentValues values = new ContentValues();
             values.put(user.key_user_id, userid);
-            values.put(Music.key_music_id,musicid);
+            values.put("musicid",musicid);
             values.put("report_date",date_to_string(null));
             insert(values, "tb_reported_song");
             return "reported";
@@ -485,16 +511,16 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "";
         int like_state = -1 ;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(userid) from 'tb_liked_music' " +
-                "where userid = "+Integer.toString(userid)+" and musicid = "+Integer.toString(musicid), null);
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_liked_music' " +
+                "where userid = "+String.valueOf(userid)+" and musicid = "+String.valueOf(musicid), null);
         if(cursor.moveToFirst()){
-            like_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+            like_state = cursor.getInt(0);
         }
         if (like_state == 0){
             if (db.isOpen()) db.close();
             ContentValues values = new ContentValues();
             values.put(user.key_user_id, userid);
-            values.put(Music.key_music_id,musicid);
+            values.put("musicid",musicid);
             values.put("liked_date",date_to_string(null));
             insert(values, "tb_liked_music");
             return "liked";
@@ -508,22 +534,19 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "";
         int like_state = -1 ;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(userid) from 'tb_liked_music' " +
-                "where userid = "+Integer.toString(userid)+" and musicid = "+Integer.toString(musicid), null);
+        Cursor cursor = db.rawQuery("select count(*) from 'tb_liked_music' " +
+                "where userid = "+String.valueOf(userid)+" and musicid = "+String.valueOf(musicid), null);
         if(cursor.moveToFirst()){
-            like_state = cursor.getInt(cursor.getColumnIndex("count(userid)"));
+            like_state = cursor.getInt(0);
         }
         if (db.isOpen()) db.close();
         if (like_state == 1){
-            /*
-            * nmidonam chejoori query delete ro benevism too java :D
-            * DELETE FROM 'tb_liked_music' where userid= userid and musicid = musicid
-            * */
-            return "unliked";
+            int res = delete("tb_liked_music","userid = " + String.valueOf(userid) + " and musicid = " + String.valueOf(musicid));
+            if (res == 1){
+                return "unliked";
+            }else return "failed";
         }else if(like_state == 0) return "you dont even liked that!";
-//      as top
         return result;
     }
-
 
 }

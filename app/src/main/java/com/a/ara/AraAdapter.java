@@ -150,9 +150,11 @@ public class AraAdapter extends ArrayAdapter{
                         }else if (id == R.id.popup_menu_go_to_album){
                             // add new func in dbHelper : find album from songid
                         }else if (id == R.id.popup_menu_like_song){
-
+                            Toast.makeText(activity, dbh.like_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_unlike_song){
-
+                            Toast.makeText(activity, dbh.unlike_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_add_to_playlist){
 
                         }
