@@ -77,8 +77,9 @@ public class dbHelper extends SQLiteOpenHelper {
     private final String cmd15 = "CREATE TABLE IF NOT EXISTS 'tb_liked_album'('userid' integer not null, 'albumid' integer not null," +
             "foreign key(userid) references tb_users(userid),foreign key(albumid) references tb_album(id))";
 
-    private final String cmd16 = "CREATE TABLE IF NOT EXISTS 'tb_have_playlist'('playlistid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
-            " 'added_date' date , foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (playlistid) references tb_playlist(id))";
+    private final String cmd16 = "CREATE TABLE IF NOT EXISTS 'tb_have_playlist'('playlistid' integer not null, 'musicid' integer not null," +
+            " 'added_date' date ,foreign key(musicid) references tb_music(id), " +
+            "foreign key (playlistid) references tb_playlist(id))";
 
     private final String cmd17 = "CREATE TABLE IF NOT EXISTS 'tb_have_album'('albumid' integer not null, 'userid' integer not null, 'musicid' integer not null," +
             " 'added_date' date,foreign key(userid) references tb_users(userid),foreign key(musicid) references tb_music(id), foreign key (albumid) references tb_album(id))";
@@ -547,6 +548,30 @@ public class dbHelper extends SQLiteOpenHelper {
             }else return "failed";
         }else if(like_state == 0) return "you dont even liked that!";
         return result;
+    }
+
+    public String like_album(int userid, int albumid){
+        String result = "";
+
+        return result;
+    }
+
+    public String unlike_album(int userid, int albumid){
+        String result = "";
+
+        return result;
+    }
+
+    public ContentValues get_artist_from_id(int id,String tag){
+        ContentValues values = new ContentValues();
+        if (tag.equals("song")){
+
+        }else if (tag.equals("album")){
+
+        }
+
+
+        return values;
     }
 
 }
