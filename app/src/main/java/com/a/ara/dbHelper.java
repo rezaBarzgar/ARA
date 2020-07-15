@@ -587,31 +587,30 @@ public class dbHelper extends SQLiteOpenHelper {
             if (res == 1) {
                 return "unliked";
             } else return "failed";
-        } else if (like_state == 0) return "you dont even liked that!";
+        } else if (like_state == 0) return "you don't even liked that!";
         return result;
     }
 
-    public ContentValues get_artist_from_musicid(int musicid, String tag) {
+    public ContentValues get_artist_from_musicid(int id, String tag) {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = getReadableDatabase();
-        if (tag.equals("artist")) {
+        if (tag.equals("song")) {
             Cursor cursor = db.rawQuery("SELECT artist.userid, artist.genre, artist.career_start_date, artist.valid, artist.nickname FROM 'tb_have_album' as A " +
                     "join 'tb_artist' as artist on A.userid = artist.userid " +
-                    "where A.musicid =" + String.valueOf(musicid), null);
+                    "where A.musicid =" + String.valueOf(id), null);
             if (cursor.moveToFirst()) {
                 values.put(artist.key_user_id, cursor.getInt(cursor.getColumnIndex(artist.key_user_id)));
                 values.put(artist.key_genre, cursor.getString(cursor.getColumnIndex(artist.key_genre)));
                 values.put(artist.key_career_start_date, cursor.getString(cursor.getColumnIndex(artist.key_career_start_date)));
                 values.put(artist.key_valid, cursor.getInt(cursor.getColumnIndex(artist.key_valid)));
                 values.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-
             }
             cursor.close();
             if (db.isOpen()) db.close();
         } else if (tag.equals("album")) {
             Cursor cursor = db.rawQuery("SELECT album.id, album.publish_date, album.title, album.genre FROM 'tb_have_album' as A " +
                     "join 'tb_album' as album on A.albumid = album.id " +
-                    "where A.musicid =" + String.valueOf(musicid), null);
+                    "where A.musicid =" + String.valueOf(id), null);
             if (cursor.moveToFirst()) {
                 values.put(Album.key_id, cursor.getInt(cursor.getColumnIndex(Album.key_id)));
                 values.put(Album.key_publish_date, cursor.getString(cursor.getColumnIndex(Album.key_publish_date)));

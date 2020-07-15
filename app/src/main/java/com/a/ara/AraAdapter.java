@@ -146,7 +146,13 @@ public class AraAdapter extends ArrayAdapter{
                             Toast.makeText(activity, dbh.report_song(userid,values.getAsInteger(Music.key_music_id))
                                     , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_go_to_artist){
-                            // add new func in dbHelper : find artist from songid
+                            ContentValues values1 = dbh.get_artist_from_musicid(values.getAsInteger(Music.key_music_id),"song");
+                            if (values1.getAsInteger(artist.key_user_id) == null){
+                                Toast.makeText(activity, "No such a user !", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Intent show_pro = show_others_profile(values1);
+                                activity.startActivity(show_pro);
+                            }
                         }else if (id == R.id.popup_menu_go_to_album){
                             // add new func in dbHelper : find album from songid
                             // tomorrow
@@ -171,7 +177,13 @@ public class AraAdapter extends ArrayAdapter{
                         if (id == R.id.popup_menu_play_album){
                             // should be removed
                         }else if (id == R.id.popup_menu_go_to_artist){
-                            // add new func in dbHelper : find artist from albumid
+                            ContentValues values1 = dbh.get_artist_from_musicid(values.getAsInteger(Album.key_id),"album");
+                            if (values1.getAsInteger(artist.key_user_id) == null) {
+                                Toast.makeText(activity, "No such a user !", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Intent show_pro = show_others_profile(values1);
+                                activity.startActivity(show_pro);
+                            }
                         }else if (id == R.id.popup_menu_like_album){
                             Toast.makeText(activity, dbh.like_album(userid,values.getAsInteger(Album.key_id))
                                     , Toast.LENGTH_SHORT).show();
