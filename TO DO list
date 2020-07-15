@@ -2,18 +2,15 @@ genre ha bayad enum beshan
 date ha ro ok konim (hour + minute)
 check baray tb_playlist.number of musics
 
-+ foreign key unique nist chon mn tunstm chnta record ba ye userid to tb_artist add konm
-
 + change name repeated title
 
 +Upgrade to vip request or invalid artist to valid (create 'tb_requests')
-+Add song to playlist (fragment or alertdialog)
++Add song to playlist ( alertdialog)
 
 + suspicious listeners who have following/follower = 5
 
 +check for song insertion and change artist genre
 +if we had time add popular music otherwise perform it with real time query
-+ premium expire perform within code
 
 + others page options menu (report user , ...)
 
@@ -22,17 +19,13 @@ check baray tb_playlist.number of musics
 reza :
 
 + suggestion for listener:
-+ add 5 latest song to artist with query (order by)
-+ find most played artist -> get genre -> add suggested artist to home page
-+ the same as top add suggested music of the week
-+ the same as top add suggested popular music from listener plays to his home page
-+ find most song included playlist , get genre , find two random song's in that genre , add to home page
-+ add a random artist with the same region to listener
-
-+fill queries in : dbHelper.play_song() & dbHelper.report_song()
-+ yesterday for query usage placed in play_song()
++ add 5 latest song to artist with query (order by)                                                     {artist profile}          in showprofile
++ latest played song of other listeners                                                                 {other listeners profile} in showprofile
++ find most played artist -> get genre -> add suggested artist to home page                             {own listener home page} sug 1
++ the same as top add 5 suggested music of the week                                                     {own listener home page} sug 2
++ the same as top add 5 suggested new music from listener plays genre to his home page                  {own listener home page} sug 3
++ find most song count playlist , get genre , find two random song's in that genre , add to home page   {own listener home page} sug 4
++ add a random artist with the same region to listener                                                  {own listener home page} sug 5
 
 --------------------------------------------------------------------------------------
 
-+should analyze together : dbHelper.like_song() & dbHelper.unlike_song()
-test

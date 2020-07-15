@@ -52,6 +52,12 @@ public class ShowProfile extends AppCompatActivity{
 
             listView = (ListView) findViewById(R.id.artist_profile_search_list);
 
+            // add 5 latest song here
+
+        }
+
+        if (!is_artist && !own){
+            // add last played song here
         }
 
         refresh_bio(income_info,show_profile_info);

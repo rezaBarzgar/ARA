@@ -73,8 +73,17 @@ public class MainActivity extends AppCompatActivity {
     private void init_main_page_views() {
         TextView show_info = (TextView) findViewById(R.id.tv_brief_name);
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
-        "\n" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
+        " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
         " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
+
+        if (check_for_premium_end(preferences.getInt(user.key_user_id,0)).equals("End")) {
+            Toast.makeText(this, "your premium has finished", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        TextView suggestions = (TextView) findViewById(R.id.tv_suggestions);
+        suggestions.setText(""); // all suggestions are shown here
 
         show_profile = (Button) findViewById(R.id.btn_show_profile);
         show_profile.setOnClickListener(new View.OnClickListener() {
@@ -673,6 +682,44 @@ public class MainActivity extends AppCompatActivity {
         else return false;
     }
 
+    public String check_for_premium_end(int userid){
+        String result = "";
 
+        return result;
+    }
+
+    public String sug_another_artist(int userid){
+        String result = "";
+
+        return result;
+    } // sug 1
+
+    public String sug_popular_song_of_week(){
+        String result = "";
+
+
+        return result;
+    }     // sug 2
+
+    public String sug_music_based_on_playes_genre(int userid){
+        String result = "";
+
+
+        return result;
+    }     // sug 3
+
+    public String sug_music_based_on_playlist(int userid){
+        String result = "";
+
+
+        return result;
+    }     // sug 4
+
+    public String sug_same_region_artist(int userid){
+        String result = "";
+
+
+        return result;
+    }     // sug 5
 
 }
