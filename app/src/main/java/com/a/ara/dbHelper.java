@@ -343,7 +343,10 @@ public class dbHelper extends SQLiteOpenHelper {
     public List get_songs_of_playlist(int playlistid) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("", null);
+        Cursor cursor = db.rawQuery("select music.id, music.title, music.duration, music.genre, artist.nickname from 'tb_have_playlist' as A " +
+                "join 'tb_music' as music on music.id = A.musicid join 'tb_have_album' as B " +
+                "on B.musicid = A.musicid join 'tb_artist' as artist on B.userid = artist.userid " +
+                "where A.playlistid = "+String.valueOf(playlistid), null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
