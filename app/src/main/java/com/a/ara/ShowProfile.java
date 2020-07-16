@@ -1,5 +1,6 @@
 package com.a.ara;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -83,7 +84,15 @@ public class ShowProfile extends AppCompatActivity{
                 }
             });
             menu.add("show playlists");
+            menu.add("add new playlist");
             menu.add("upgrade to premium");
+            menu.add("change password").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    change_password(userid);
+                    return false;
+                }
+            });
         }else if (is_artist && own){
             menu.add("show followers").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
@@ -102,9 +111,16 @@ public class ShowProfile extends AppCompatActivity{
                 }
             });
             menu.add("add song to existing album");
-            menu.add("add new album");
+            menu.add("add song to new album");
             menu.add("delete song from album");
             menu.add("delete whole album");
+            menu.add("change password").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    change_password(userid);
+                    return false;
+                }
+            });
 
         }else if (!is_artist && !own){
 
@@ -154,6 +170,13 @@ public class ShowProfile extends AppCompatActivity{
                             + dbh.five_latest_songs_of_artist(userid)
             );
         }
+    }
+
+    private void change_password(int userid){
+        Intent intent = new Intent(ShowProfile.this,ChangePassword.class);
+        Bundle cr = new Bundle();
+        cr.putInt(user.key_user_id,
+                income_info.getInt(user.key_user_id));
     }
 
 }

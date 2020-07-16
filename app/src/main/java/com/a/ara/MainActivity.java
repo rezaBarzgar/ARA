@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
         " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
         " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
-        "\nartist : " + /*dbh.sug_another_artist(preferences.getInt(user.key_user_id,0)) + */
+        "\nartist : " + dbh.sug_another_artist(preferences.getInt(user.key_user_id,0))+
         "\n" + dbh.sug_popular_songs_of_week() +
         "\n" /*+ dbh.sug_music_based_on_playes_genre(preferences.getInt(user.key_user_id,0)) */+
         "\n" + dbh.sug_same_region_artist(preferences.getInt(user.key_user_id,0))
@@ -501,6 +501,249 @@ public class MainActivity extends AppCompatActivity {
                 values.put(playlist.key_title,jsonObject.getString(playlist.key_title));
 
                 dbh.insert(values,"tb_playlist");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_follow(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("followingid",
+                        Integer.valueOf(jsonObject.getString("followingid")));
+                values.put("followerid",
+                        Integer.valueOf(jsonObject.getString("followerid")));
+                values.put("follow_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("follow_date"))));
+
+                dbh.insert(values,"tb_follow");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_liked_playlist(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("playlistid",
+                        Integer.valueOf(jsonObject.getString("playlistid")));
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("like_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("like_date"))));
+
+                dbh.insert(values,"tb_liked_playlist");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_played_song(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("musicid",
+                        Integer.valueOf(jsonObject.getString("musicid")));
+                values.put("played_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("played_date"))));
+
+                dbh.insert(values,"tb_played_song");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_reported_song(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("musicid",
+                        Integer.valueOf(jsonObject.getString("musicid")));
+                values.put("report_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("report_date"))));
+
+                dbh.insert(values,"tb_reported_song");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_liked_music(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("musicid",
+                        Integer.valueOf(jsonObject.getString("musicid")));
+                values.put("liked_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("liked_date"))));
+
+                dbh.insert(values,"tb_liked_music");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_liked_album(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("albumid",
+                        Integer.valueOf(jsonObject.getString("albumid")));
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+
+                dbh.insert(values,"tb_liked_album");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add_have_playlist(){
+        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put("playlistid",
+                        Integer.valueOf(jsonObject.getString("playlistid")));
+                values.put("userid",
+                        Integer.valueOf(jsonObject.getString("userid")));
+                values.put("added_date",
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString("added_date"))));
+
+                dbh.insert(values,"tb_have_playlist");
             }
         } catch (JSONException e) {
             e.printStackTrace();

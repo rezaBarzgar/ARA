@@ -57,9 +57,6 @@ public class dbHelper extends SQLiteOpenHelper {
     private final String cmd9 = "CREATE TABLE IF NOT EXISTS 'tb_follow'('followingid' integer,'followerid' integer ," +
             " 'follow_date' date , foreign key(followingid) references tb_users(userid) ,foreign key(followerid) references tb_users(userid))";
 
-    private final String cmd10 = "CREATE TABLE IF NOT EXISTS 'tb_shared_playlist'('userid' integer,'playlistid' integer ," +
-            "foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
-
     private final String cmd11 = "CREATE TABLE IF NOT EXISTS 'tb_liked_playlist'('userid' integer,'playlistid' integer ," +
             " 'like_date' date ,foreign key(userid) references tb_users(userid) ,foreign key(playlistid) references tb_playlist(id))";
 
@@ -101,7 +98,6 @@ public class dbHelper extends SQLiteOpenHelper {
         db.execSQL(cmd7);
         db.execSQL(cmd8);
         db.execSQL(cmd9);
-        db.execSQL(cmd10);
         db.execSQL(cmd11);
         db.execSQL(cmd12);
         db.execSQL(cmd13);
@@ -123,6 +119,7 @@ public class dbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS 'tb_playlist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_playlist'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_shared_playlist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_follow'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_played_song'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_reported_song'");
@@ -736,7 +733,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
     public String sug_another_artist(int userid) {
         String result = "suggested artist : ";
-        String artist_id = "";
+        int artist_id = -1;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A" +
@@ -744,17 +741,18 @@ public class dbHelper extends SQLiteOpenHelper {
                 " where played.userid = " + String.valueOf(userid) +
                 " group by artist.userid limit 1 ", null);
         if (cursor.moveToFirst()) {
-            artist_id = String.valueOf(cursor.getInt(0));
+            artist_id = cursor.getInt(0);
         }
 
         cursor.close();
 
-        // wrong query below
-        cursor = db.rawQuery("select artist.nickname from'tb_artist' as artist " +
-                "where artist.genre = ( " +
-                "select artist.genre from 'tb_artist' as artist " +
-                "where artist.userid =  " + String.valueOf(artist_id) +
-                ") and not artist.userid =" + String.valueOf(artist_id), null);
+        if (artist_id != -1) {
+            cursor = db.rawQuery("select artist.nickname from'tb_artist' as artist " +
+                    "where artist.genre = ( " +
+                    "select artist.genre from 'tb_artist' as artist " +
+                    "where artist.userid =  " + String.valueOf(artist_id) +
+                    ") and not artist.userid =" + String.valueOf(artist_id), null);
+        }
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         } else {
@@ -776,7 +774,7 @@ public class dbHelper extends SQLiteOpenHelper {
         day = day - 7;
         if (day <= 0) day = 1;
         thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year ;
-        thisweek = "'" + date_to_string(string_to_date(thisweek)) + "'";
+        thisweek = "'" + date_to_string_without_time(string_to_date(thisweek)) + "'" ;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select music.title,count(*) from 'tb_played_song' as played join " +
@@ -924,6 +922,19 @@ public class dbHelper extends SQLiteOpenHelper {
 
         return result;
     } // I didn't test it
+
+    public String saved_question(int userid){
+        String result = "";
+
+        return result;
+    }
+
+    public String change_pass(String answer,String new_pass,int userid){
+        String result = "";
+
+
+        return result;
+    }
 
 }
 
