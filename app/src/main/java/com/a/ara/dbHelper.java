@@ -735,7 +735,7 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "suggested artist : ";
         int artist_id = -1;
 
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();//todo
         Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A" +
                 " on played.musicid join 'tb_artist' as artist on A.userid = artist.userid" +
                 " where played.userid = " + String.valueOf(userid) +
@@ -924,15 +924,48 @@ public class dbHelper extends SQLiteOpenHelper {
     } // I didn't test it
 
     public String saved_question(int userid){
-        String result = "";
-
+        String result ;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT user.question  FROM 'tb_users' as user " +
+                "where user.userid = "+String.valueOf(userid), null);
+        if (cursor.moveToFirst()){
+            result = cursor.getString(0);
+        }else result = "not founded !";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
     public String change_pass(String answer,String new_pass,int userid){
         String result = "";
+        boolean is_equal;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM 'tb_users' as user " +
+                "where user.userid = "+String.valueOf(userid), null);
+        if (cursor.moveToFirst()){
+            ContentValues temp_v = new ContentValues();
+            is_equal = answer.equals(cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
+            if (is_equal){
+                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_password,new_pass);
+                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
+                temp_v.put(user.key_user_question,cursor.getString(cursor.getColumnIndex(user.key_user_question)));
+                temp_v.put(user.key_user_answer,cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
+                temp_v.put(user.key_user_answer,cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
 
-
+                delete("tb_users","userid = " + String.valueOf(userid));
+                insert(temp_v,"tb_users");
+                result = "password changed successfully";
+            }else{
+                result = "your answers doesn't match !";
+            }
+        }else result = "not founded !";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
