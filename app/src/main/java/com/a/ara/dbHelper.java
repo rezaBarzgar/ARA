@@ -663,9 +663,11 @@ public class dbHelper extends SQLiteOpenHelper {
             artist_id = String.valueOf(cursor.getInt(0));
         }
 
-        cursor = db.rawQuery("select artist.nickname from 'tb_artist' as artist " +
-                "where not artist.userid = " + artist_id +
-                "limit 1", null);
+        cursor = db.rawQuery("select artist.nickname from'tb_artist' as artist " +
+                "where artist.genre = ( " +
+                "select artist.genre from 'tb_artist' as artist " +
+                "where artist.userid =  "+artist_id +
+                ")and not artist.userid ="+artist_id, null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         } else {
