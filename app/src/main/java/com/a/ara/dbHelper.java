@@ -262,7 +262,7 @@ public class dbHelper extends SQLiteOpenHelper {
     public List get_song(String query) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select music.id, music.duration, music.genre, music.title,artist.nickname, album.title  from 'tb_have_album' as have_album join 'tb_music' as music " +
+        Cursor cursor = db.rawQuery("select music.id, music.duration, music.genre, music.title as music_title,artist.nickname, album.title as album_title from 'tb_have_album' as have_album join 'tb_music' as music " +
                 "on music.id = have_album.musicid " +
                 "join 'tb_artist' as artist on have_album.userid = artist.userid " +
                 "join 'tb_album' as album on album.id = have_album.albumid " +
@@ -273,9 +273,9 @@ public class dbHelper extends SQLiteOpenHelper {
                 temp_v.put(Music.key_music_id, cursor.getInt(cursor.getColumnIndex(Music.key_music_id)));
                 temp_v.put(Music.key_music_duration, cursor.getString(cursor.getColumnIndex(Music.key_music_duration)));
                 temp_v.put(Music.key_music_genre, cursor.getString(cursor.getColumnIndex(Music.key_music_genre)));
-                temp_v.put(Music.key_music_title, cursor.getString(cursor.getColumnIndex(Music.key_music_title)));
+                temp_v.put("music_title", cursor.getString(cursor.getColumnIndex("music_title")));
                 temp_v.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
-                temp_v.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                temp_v.put("album_title", cursor.getString(cursor.getColumnIndex("album_title")));
 
                 song_list.add(temp_v);
             } while (cursor.moveToNext());
