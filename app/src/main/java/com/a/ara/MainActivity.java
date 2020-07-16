@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     List list = new ArrayList();
     ArrayAdapter adapter;
-    Button show_profile;
 
     public static final int sign_up_req_code = 1;
 
@@ -63,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         dbh = new dbHelper(this,"sho");
+
+        add_admin();
 
         preferences = getSharedPreferences("locals",MODE_PRIVATE);
         current_user = preferences.getString("username","***");
@@ -83,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
         " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
         " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
-        "\n" + dbh.sug_another_artist(preferences.getInt(user.key_user_id,0))+
+        "\n\n" + dbh.sug_another_artist(preferences.getInt(user.key_user_id,0))+
         "\n" + dbh.sug_popular_songs_of_week() +
-        "\n" /*+ dbh.sug_music_based_on_playes_genre(preferences.getInt(user.key_user_id,0)) */+
+        "\n" + dbh.sug_music_based_on_playes_genre(preferences.getInt(user.key_user_id,0)) +
+        "\n" + dbh.sug_music_based_on_playlist(preferences.getInt(user.key_user_id,0)) +
         "\n" + dbh.sug_same_region_artist(preferences.getInt(user.key_user_id,0))
         );
 
@@ -95,17 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        TextView suggestions = (TextView) findViewById(R.id.tv_suggestions_2);
 //        suggestions.setText("arist : ");
-
-
-        show_profile = (Button) findViewById(R.id.btn_show_profile);
-        show_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent show_pro = go_to_show_profile();
-                startActivity(show_pro);
-
-            }
-        });
 
         Spinner sp_search_for = (Spinner) findViewById(R.id.sp_search_for);
         search_for_items = getResources().getStringArray(R.array.search_options);
@@ -163,15 +154,6 @@ public class MainActivity extends AppCompatActivity {
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
                 "\n" + preferences.getString(user.key_user_first_name,"NOT FOUND") +
                 " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
-
-        show_profile = (Button) findViewById(R.id.btn_show_profile);
-        show_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent show_pro = go_to_show_profile();
-                startActivity(show_pro);
-            }
-        });
 
         Spinner sp_search_for = (Spinner) findViewById(R.id.sp_search_for);
         search_for_items = getResources().getStringArray(R.array.search_options);
@@ -324,6 +306,20 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void add_admin(){
+        ContentValues values = new ContentValues();
+        values.put(user.key_user_id, 1999);
+        values.put(user.key_user_first_name,"admin");
+        values.put(user.key_user_last_name,"access");
+        values.put(user.key_user_name,"admin_ac");
+        values.put(user.key_user_password,"admin123");
+        values.put(user.key_user_email,"amhgh1377@gmail.com");
+        values.put(user.key_user_region,"Asia");
+        values.put(user.key_user_question,"favorite color");
+        values.put(user.key_user_answer,"black");
+        dbh.insert(values,"tb_users");
     }
 
     private void add_listner(){
@@ -966,6 +962,14 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
+        menu.add("show profile").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent show_pro = go_to_show_profile();
+                startActivity(show_pro);
+                return false;
+            }
+        });
 
         menu.add("log out").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

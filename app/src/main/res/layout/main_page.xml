@@ -31,13 +31,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_show_profile"
-            android:text="show profile"
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-
 
     </LinearLayout>
 
