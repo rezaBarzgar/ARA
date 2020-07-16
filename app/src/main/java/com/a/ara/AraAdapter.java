@@ -41,6 +41,7 @@ public class AraAdapter extends ArrayAdapter{
 
     @NonNull
     @Override
+
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null){

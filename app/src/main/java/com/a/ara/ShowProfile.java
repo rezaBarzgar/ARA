@@ -175,8 +175,9 @@ public class ShowProfile extends AppCompatActivity{
     private void change_password(int userid){
         Intent intent = new Intent(ShowProfile.this,ChangePassword.class);
         Bundle cr = new Bundle();
-        cr.putInt(user.key_user_id,
-                income_info.getInt(user.key_user_id));
+        cr.putInt(user.key_user_id,userid);
+        intent.putExtra("change_password",cr);
+        startActivity(intent);
     }
 
 }

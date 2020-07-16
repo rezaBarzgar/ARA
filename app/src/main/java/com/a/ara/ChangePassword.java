@@ -34,6 +34,17 @@ public class ChangePassword extends AppCompatActivity {
         submit = (Button) findViewById(R.id.btn_submit_change_password);
 
         saved_question = dbh.saved_question(userid);
+        if (saved_question.equals("1")){
+            saved_question = "favorite color";
+        } else if (saved_question.equals("2")){
+            saved_question = "first job";
+        } else if (saved_question.equals("3")){
+            saved_question = "dream car";
+        } else if (saved_question.equals("4")){
+            saved_question = "crush";
+        }
+
+        question.setText(saved_question);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
