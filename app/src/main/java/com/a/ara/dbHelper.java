@@ -262,10 +262,10 @@ public class dbHelper extends SQLiteOpenHelper {
     public List get_song(String query) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
-        Cursor cursor = db.rawQuery("select * from 'tb_have_album' as have_album left join 'tb_music' as music " +
+        Cursor cursor = db.rawQuery("select music.id, music.duration, music.genre, music.title,artist.nickname, album.title  from 'tb_have_album' as have_album join 'tb_music' as music " +
                 "on music.id = have_album.musicid " +
-                "left join 'tb_artist' as artist_b on have_album.userid = artist_b.userid " +
-                "left join 'tb_album' as album on album.id = have_album.albumid " +
+                "join 'tb_artist' as artist on have_album.userid = artist.userid " +
+                "join 'tb_album' as album on album.id = have_album.albumid " +
                 "where music.title like '" + query + "%'", null);
         if (cursor.moveToFirst()) {
             do {
@@ -318,9 +318,8 @@ public class dbHelper extends SQLiteOpenHelper {
                 "join 'tb_music' as music on music.id = A.musicid join 'tb_artist' as artist on A.userid = artist.userid " +
                 "where A.albumid in ( " +
                 "select B.albumid from 'tb_have_album' as B " +
-                "where B.musicid =  "+ String.valueOf(songid) +
-                ")", null);
-                                //  cursor is empty
+                "where B.musicid =  "+ String.valueOf(songid)+")", null);
+
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
