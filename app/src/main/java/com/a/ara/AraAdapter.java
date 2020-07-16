@@ -85,6 +85,9 @@ public class AraAdapter extends ArrayAdapter{
                 s = values.getAsString(Album.key_title);
                 s += " : " + values.getAsString(artist.key_nickname);
                 s += " _ " + values.getAsString(Album.key_genre);
+            }else if (tag.equals("playlists")){
+                s = values.getAsString(playlist.key_title);
+                s += " : " + values.getAsString(user.key_user_name);
             }else if (tag.equals("follower_items")){
                 s = values.getAsString(user.key_user_name);
                 s += " : " + values.getAsString(user.key_user_first_name);

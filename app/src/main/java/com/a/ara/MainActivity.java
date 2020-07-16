@@ -149,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
                     list = dbh.get_playlist(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }
-//                else {
-//                    list = null;
-//                    refresh_display(list,preferences.getInt(user.key_user_id,0));
-//                }
                 return false;
             }
         });
@@ -471,6 +467,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void add_playlist(){
+        InputStream inputStream = getResources().openRawResource(R.raw.playlist);
+        StringBuilder sb = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        try {
+            while (bis.available() != 0){
+                sb.append((char) bis.read());
+            }
+            bis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, " Exception", Toast.LENGTH_SHORT).show();
+        }
+
+        if (sb.equals(null))return;
+        String jsonString = sb.toString();
+        ContentValues values = new ContentValues();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i <jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                values.put(playlist.key_id,
+                        Integer.valueOf(jsonObject.getString(playlist.key_id)));
+                values.put(playlist.key_owner_id,
+                        Integer.valueOf(jsonObject.getString(playlist.key_owner_id)));
+                values.put(playlist.key_create_date,
+                        dbh.date_to_string(dbh.string_to_date(jsonObject.getString(playlist.key_create_date))));
+                values.put(playlist.key_title,jsonObject.getString(playlist.key_title));
+
+                dbh.insert(values,"tb_playlist");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void add_have_album(){
         InputStream inputStream = getResources().openRawResource(R.raw.have_album);
         StringBuilder sb = new StringBuilder();
@@ -640,6 +672,13 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        subMenu.add("add Playlists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                add_playlist();
+                return false;
+            }
+        });
         subMenu.add("add have Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -647,6 +686,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
 
         menu.add("import all").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -657,6 +697,7 @@ public class MainActivity extends AppCompatActivity {
                 add_music();
                 add_album();
                 add_have_album();
+                add_playlist();
                 return false;
             }
         });

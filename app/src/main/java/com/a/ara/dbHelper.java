@@ -381,7 +381,7 @@ public class dbHelper extends SQLiteOpenHelper {
                         values.put(user.key_user_last_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
                         result.add(values);
                     }
-                    user_cursor.close(); // *******
+                    user_cursor.close();
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -403,7 +403,7 @@ public class dbHelper extends SQLiteOpenHelper {
                         values.put(user.key_user_last_name, user_cursor.getString(user_cursor.getColumnIndex(user.key_user_last_name)));
                         result.add(values);
                     }
-                    user_cursor.close(); // *******
+                    user_cursor.close();
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -430,6 +430,7 @@ public class dbHelper extends SQLiteOpenHelper {
             values.put("followerid", follower_id);
             values.put("follow_date", date_to_string(null));
             long insertid = db.insert("tb_follow", null, values);
+            if (db.isOpen()) db.close();
             if (insertid == -1) {
                 return "Failed";
             } else return "Followed";
@@ -450,6 +451,7 @@ public class dbHelper extends SQLiteOpenHelper {
             db = getWritableDatabase();
             long deleteid = db.delete("tb_follow", "followingid =" + String.valueOf(following_id) +
                     " and followerid =" + String.valueOf(follower_id), null);
+            if (db.isOpen()) db.close();
             if (deleteid == -1) {
                 return "Failed";
             } else return "unFollowed";
@@ -512,6 +514,7 @@ public class dbHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             if (cursor.getCount() < 5) {
                 if (db.isOpen()) db.close();
+                cursor.close();
                 ContentValues values = new ContentValues();
                 values.put(user.key_user_id, userid);
                 values.put("musicid", musicid);
@@ -546,6 +549,7 @@ public class dbHelper extends SQLiteOpenHelper {
             return "you have already reported this song";
         } else if (report_state == 0) {
             if (db.isOpen()) db.close();
+            cursor.close();
             ContentValues values = new ContentValues();
             values.put(user.key_user_id, userid);
             values.put("musicid", musicid);
@@ -568,6 +572,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
         if (like_state == 0) {
             if (db.isOpen()) db.close();
+            cursor.close();
             ContentValues values = new ContentValues();
             values.put(user.key_user_id, userid);
             values.put("musicid", musicid);
@@ -575,7 +580,6 @@ public class dbHelper extends SQLiteOpenHelper {
             insert(values, "tb_liked_music");
             return "liked";
         } else if (like_state == 1) return "you already liked it";
-
 
         return result;
     }
@@ -590,6 +594,7 @@ public class dbHelper extends SQLiteOpenHelper {
             like_state = cursor.getInt(0);
         }
         if (db.isOpen()) db.close();
+        cursor.close();
         if (like_state == 1) {
             int res = delete("tb_liked_music", "userid = " + String.valueOf(userid) + " and musicid = " + String.valueOf(musicid));
             if (res == 1) {
@@ -610,6 +615,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
         if (like_state == 0) {
             if (db.isOpen()) db.close();
+            cursor.close();
             ContentValues values = new ContentValues();
             values.put(user.key_user_id, userid);
             values.put("albumid", albumid);
@@ -631,6 +637,7 @@ public class dbHelper extends SQLiteOpenHelper {
             like_state = cursor.getInt(0);
         }
         if (db.isOpen()) db.close();
+        cursor.close();
         if (like_state == 1) {
             int res = delete("tb_liked_album", "userid = " + String.valueOf(userid) + " and albumid = " + String.valueOf(albumid));
             if (res == 1) {
@@ -697,7 +704,8 @@ public class dbHelper extends SQLiteOpenHelper {
         } else {
             result = "not founded suggested artist";
         }
-
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
@@ -725,9 +733,9 @@ public class dbHelper extends SQLiteOpenHelper {
             do {
                 result = result + cursor.getString(cursor.getColumnIndex(Music.key_music_title)) + ", ";
             } while (cursor.moveToNext());
-
         }
-
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
@@ -756,6 +764,8 @@ public class dbHelper extends SQLiteOpenHelper {
                 result = result + cursor.getString(0) + ", ";
             } while (cursor.moveToNext());
         } else result = "not founded suggested music";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
@@ -790,6 +800,8 @@ public class dbHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
 
         } else result = "not founded suggested music for you playlist";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
@@ -812,6 +824,8 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = result + (cursor.getString(0));
         } else result = "no artist from you region founded";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 
@@ -840,8 +854,9 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0)+ ", ";
         }else result = "no music released recently";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
-
     }
 
     public String check_for_premium_end(int userid) {
