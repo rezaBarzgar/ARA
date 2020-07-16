@@ -190,6 +190,8 @@ public class AraAdapter extends ArrayAdapter{
                         }else if (id == R.id.popup_menu_unlike_album){
                             Toast.makeText(activity, dbh.unlike_album(userid,values.getAsInteger(Album.key_id))
                                     , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_album_songs){
+                            show_album_dialog();
                         }
                         return false;
                     }
@@ -275,6 +277,13 @@ public class AraAdapter extends ArrayAdapter{
         if (dialog.getWindow() != null){
             dialog.getWindow().setLayout((int)(0.8 * scrSize.x),ViewGroup.LayoutParams.WRAP_CONTENT);
         }
+    }
+
+    private void show_album_dialog(){
+        Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.album_list);
+        changeDialogSize(dialog);
+        dialog.show();
     }
 
 }

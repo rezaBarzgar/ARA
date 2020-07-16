@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
         " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
 
-        if (check_for_premium_end(preferences.getInt(user.key_user_id,0)).equals("End")) {
+        if (dbh.check_for_premium_end(preferences.getInt(user.key_user_id,0)).equals("End")) {
             Toast.makeText(this, "your premium has finished", Toast.LENGTH_SHORT).show();
         }
 
