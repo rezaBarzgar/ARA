@@ -818,7 +818,7 @@ public class dbHelper extends SQLiteOpenHelper {
             do {
                 result = result + cursor.getString(0)+", ";
             }while (cursor.moveToNext());
-        }else result = "no music played recently";
+        }else result = "no recently music from artist";
         return result;
 
     }
