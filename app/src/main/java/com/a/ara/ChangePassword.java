@@ -53,7 +53,7 @@ public class ChangePassword extends AppCompatActivity {
                     answer.setError("empty answer");
                     answer.requestFocus();
                 }else if (new_password.getText().toString().isEmpty()){
-                    new_password.setError("empty answer");
+                    new_password.setError("empty password");
                     new_password.requestFocus();
                 }
 

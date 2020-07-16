@@ -19,7 +19,8 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ShowProfile" />
         <activity android:name=".ChangePassword" />
-        <activity android:name=".AddNewAlbum"></activity>
+        <activity android:name=".AddNewAlbum" />
+        <activity android:name=".AddSongToExistingAlbum"></activity>
     </application>
 
 </manifest>

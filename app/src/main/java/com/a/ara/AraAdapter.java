@@ -101,6 +101,8 @@ public class AraAdapter extends ArrayAdapter{
                 s = values.getAsString(Music.key_music_title);
                 s += " : " + values.getAsString(Music.key_music_genre);
                 s += " _ " + values.getAsString(artist.key_nickname);
+            } else if (tag.equals("ex_album")){
+                s = values.getAsString(Album.key_title);
             }
             info.setText(s);
 
@@ -276,6 +278,21 @@ public class AraAdapter extends ArrayAdapter{
                         }else if (id == R.id.popup_menu_unlike_album_song){
                             Toast.makeText(activity, dbh.unlike_song(userid,values.getAsInteger(Music.key_music_id))
                                     , Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                });
+            }else if (tag.equals("ex_album")){
+                popupMenu.inflate(R.menu.existing_album_item_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.popup_menu_add_song_to_album){
+                            Toast.makeText(activity, dbh.add_song(
+                                    AddSongToExistingAlbum.st_title,AddSongToExistingAlbum.st_duration,
+                                    AddSongToExistingAlbum.st_genre,values.getAsInteger(Album.key_id),userid
+                            ), Toast.LENGTH_SHORT).show();
                         }
                         return false;
                     }

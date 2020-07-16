@@ -110,8 +110,20 @@ public class ShowProfile extends AppCompatActivity{
                     return false;
                 }
             });
-            menu.add("add song to existing album");
-            menu.add("add song to new album");
+            menu.add("add song to existing album").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_to_existing_album(userid);
+                    return false;
+                }
+            });
+            menu.add("add song to new album").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_new_album(userid);
+                    return false;
+                }
+            });
             menu.add("delete song from album");
             menu.add("delete whole album");
             menu.add("change password").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -177,6 +189,22 @@ public class ShowProfile extends AppCompatActivity{
         Bundle cr = new Bundle();
         cr.putInt(user.key_user_id,userid);
         intent.putExtra("change_password",cr);
+        startActivity(intent);
+    }
+
+    private void add_new_album(int userid){
+        Intent intent = new Intent(ShowProfile.this,AddNewAlbum.class);
+        Bundle cr = new Bundle();
+        cr.putInt(user.key_user_id,userid);
+        intent.putExtra("add_new_album",cr);
+        startActivity(intent);
+    }
+
+    private void add_to_existing_album(int userid){
+        Intent intent = new Intent(ShowProfile.this,AddSongToExistingAlbum.class);
+        Bundle cr = new Bundle();
+        cr.putInt(user.key_user_id,userid);
+        intent.putExtra("add_to_existing_album",cr);
         startActivity(intent);
     }
 

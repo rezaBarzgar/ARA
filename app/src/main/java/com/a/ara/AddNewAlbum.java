@@ -33,10 +33,10 @@ public class AddNewAlbum extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (title.getText().toString().isEmpty()){
-                    title.setError("empty answer");
+                    title.setError("empty title");
                     title.requestFocus();
                 }else if (genre.getText().toString().isEmpty()){
-                    genre.setError("empty answer");
+                    genre.setError("empty genre");
                     genre.requestFocus();
                 }
 
