@@ -1018,5 +1018,39 @@ public class dbHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+    public String add_song(String title, int duration, String genre,int albumid, int userid){
+        String result = "";
+        int music_id;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("select id from 'tb_music' " +
+                "order by id desc " +
+                "limit 1", null);
+        if (cursor.moveToFirst()){
+            music_id = cursor.getInt(0) + 1;
+        }else music_id =3001;
+
+        ContentValues music_values = new ContentValues();
+        music_values.put(Music.key_music_id,music_id);
+        music_values.put(Music.key_music_title , title);
+        music_values.put(Music.key_music_duration, duration);
+        music_values.put(Music.key_music_genre, genre);
+        insert(music_values,"tb_music");
+
+
+        ContentValues have_album = new ContentValues();
+        have_album.put(Album.key_id,albumid);
+        have_album.put(artist.key_user_id,userid);
+        have_album.put(Music.key_music_id,music_id);
+        have_album.put("added_date", date_to_string_without_time(null));
+        insert(have_album, "tb_have_album");
+
+
+        result = "successfully added!";
+        if (db.isOpen()) db.close();
+        cursor.close();
+        return result;
+
+    }
 }
 
