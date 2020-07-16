@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="show songs"
+        android:id="@+id/popup_menu_playlist_songs"/>
+    <item android:title="like"
+        android:id="@+id/popup_menu_like_playlist"/>
+    <item android:title="unlike"
+        android:id="@+id/popup_menu_unlike_playlist"/>
+
+</menu>

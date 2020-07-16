@@ -163,8 +163,7 @@ public class AraAdapter extends ArrayAdapter{
                                 activity.startActivity(show_pro);
                             }
                         }else if (id == R.id.popup_menu_go_to_album){
-                            // add new func in dbHelper : find album from songid
-                            // tomorrow
+                            show_songs_dialog(values.getAsInteger(Music.key_music_id));
                         }else if (id == R.id.popup_menu_like_song){
                             Toast.makeText(activity, dbh.like_song(userid,values.getAsInteger(Music.key_music_id))
                                     , Toast.LENGTH_SHORT).show();
@@ -183,9 +182,7 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        if (id == R.id.popup_menu_play_album){
-                            // should be removed
-                        }else if (id == R.id.popup_menu_go_to_artist){
+                        if (id == R.id.popup_menu_go_to_artist){
                             ContentValues values1 = dbh.get_artist_from_musicid(values.getAsInteger(Album.key_id),"album");
                             if (values1.getAsInteger(artist.key_user_id) == null) {
                                 Toast.makeText(activity, "No such a user !", Toast.LENGTH_SHORT).show();
@@ -205,7 +202,23 @@ public class AraAdapter extends ArrayAdapter{
                         return false;
                     }
                 });
-            }else if (tag.equals("follower_items")){
+            } else if (tag.equals("playlists")){
+                popupMenu.inflate(R.menu.playlist_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.popup_menu_go_to_artist){
+
+                        }else if (id == R.id.popup_menu_like_album){
+
+                        }else if (id == R.id.popup_menu_unlike_album){
+
+                        }
+                        return false;
+                    }
+                });
+            } else if (tag.equals("follower_items")){
                 popupMenu.inflate(R.menu.follower_popup_menu);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -312,6 +325,18 @@ public class AraAdapter extends ArrayAdapter{
 
     private void show_album_dialog(int albumid){
         List list = dbh.get_songs_of_album(albumid);
+        Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.album_list);
+        ListView album_list = (ListView) dialog.findViewById(R.id.album_items_list);
+        if (list == null) list = new ArrayList();
+        ArrayAdapter adapter = new AraAdapter(activity,list,userid,"album_items");
+        album_list.setAdapter(adapter);
+        changeDialogSize(dialog);
+        dialog.show();
+    }
+
+    private void show_songs_dialog(int songid){
+        List list = dbh.get_songs_of_song(songid);
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.album_list);
         ListView album_list = (ListView) dialog.findViewById(R.id.album_items_list);
