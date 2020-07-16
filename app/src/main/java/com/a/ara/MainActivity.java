@@ -145,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
                 }else if (search_for.equals("albums")){
                     list = dbh.get_album(newText);
                     refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
+                }else if (search_for.equals("playlists")){
+                    list = dbh.get_playlist(newText);
+                    refresh_display(list,preferences.getInt(user.key_user_id,0),search_for);
                 }
 //                else {
 //                    list = null;

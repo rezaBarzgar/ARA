@@ -45,7 +45,7 @@ public class dbHelper extends SQLiteOpenHelper {
             " 'genre' text ,'career_start_date' datetime , 'valid' bool , 'nickname' text , foreign key(userid) references tb_users(userid))";
 
     private final String cmd6 = "CREATE TABLE IF NOT EXISTS 'tb_playlist'('id' INTEGER PRIMARY KEY NOT NULL ," +
-            " 'ownerid' integer not null , 'title' text , 'create_date' date , 'number_of_musics' integer , " +
+            " 'ownerid' integer not null , 'title' text , 'create_date' date , " +
             "foreign key(ownerid) references tb_users(userid))";
 
     private final String cmd7 = "CREATE TABLE IF NOT EXISTS 'tb_music'('id' INTEGER PRIMARY KEY NOT NULL ," +
@@ -120,7 +120,9 @@ public class dbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS 'tb_artist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_music'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_album'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_playlist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_have_album'");
+        db.execSQL("DROP TABLE IF EXISTS 'tb_have_playlist'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_follow'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_played_song'");
         db.execSQL("DROP TABLE IF EXISTS 'tb_reported_song'");
@@ -333,7 +335,21 @@ public class dbHelper extends SQLiteOpenHelper {
         return album_list;
     }
 
-
+    public List get_playlist(String query) {
+        SQLiteDatabase db = getReadableDatabase();
+        List album_list = new ArrayList();
+        Cursor cursor = db.rawQuery("", null);
+        if (cursor.moveToFirst()) {
+            do {
+                ContentValues temp_v = new ContentValues();
+                // fill temps
+                album_list.add(temp_v);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen()) db.close();
+        return album_list;
+    }
 
     public List get_follow_items(String which, int userid) {
         SQLiteDatabase db = getReadableDatabase();
@@ -508,8 +524,6 @@ public class dbHelper extends SQLiteOpenHelper {
             insert(values, "tb_played_song");
             return "played";
         }
-        cursor.close();
-        if (db.isOpen()) db.close();
 
         return result;
     }
@@ -534,8 +548,6 @@ public class dbHelper extends SQLiteOpenHelper {
             insert(values, "tb_reported_song");
             return "reported";
         }
-        cursor.close();
-        if (db.isOpen()) db.close();
 
         return result;
     }
@@ -558,8 +570,7 @@ public class dbHelper extends SQLiteOpenHelper {
             insert(values, "tb_liked_music");
             return "liked";
         } else if (like_state == 1) return "you already liked it";
-        cursor.close();
-        if (db.isOpen()) db.close();
+
 
         return result;
     }
@@ -580,8 +591,6 @@ public class dbHelper extends SQLiteOpenHelper {
                 return "unliked";
             } else return "failed";
         } else if (like_state == 0) return "you dont even liked that!";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -602,8 +611,7 @@ public class dbHelper extends SQLiteOpenHelper {
             insert(values, "tb_liked_album");
             return "liked";
         } else if (like_state == 1) return "you already liked it";
-        cursor.close();
-        if (db.isOpen()) db.close();
+
 
         return result;
     }
@@ -624,8 +632,6 @@ public class dbHelper extends SQLiteOpenHelper {
                 return "unliked";
             } else return "failed";
         } else if (like_state == 0) return "you don't even liked that!";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -686,8 +692,7 @@ public class dbHelper extends SQLiteOpenHelper {
         } else {
             result = "not founded suggested artist";
         }
-        cursor.close();
-        if (db.isOpen()) db.close();
+
         return result;
     }
 
@@ -717,8 +722,7 @@ public class dbHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
 
         }
-        cursor.close();
-        if (db.isOpen()) db.close();
+
         return result;
     }
 
@@ -747,8 +751,6 @@ public class dbHelper extends SQLiteOpenHelper {
                 result = result + cursor.getString(0) + ", ";
             } while (cursor.moveToNext());
         } else result = "not founded suggested music";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -783,8 +785,6 @@ public class dbHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
 
         } else result = "not founded suggested music for you playlist";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -807,8 +807,6 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = result + (cursor.getString(0));
         } else result = "no artist from you region founded";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -823,8 +821,6 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         }else result = "no music played recently";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
     }
 
@@ -839,8 +835,6 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0)+ ", ";
         }else result = "no music released recently";
-        cursor.close();
-        if (db.isOpen()) db.close();
         return result;
 
     }
@@ -850,5 +844,6 @@ public class dbHelper extends SQLiteOpenHelper {
 
         return result;
     }
+
 }
 
