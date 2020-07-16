@@ -734,12 +734,12 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "suggested artist : ";
         int artist_id = -1;
 
-        SQLiteDatabase db = getReadableDatabase();//todo
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select artist.userid, count(*) from 'tb_played_song' as played join 'tb_have_album' as A " +
                 "on played.musicid = A.musicid join 'tb_artist' as artist " +
                 "on artist.userid = A.userid " +
                 "where played.userid =  "+ String.valueOf(userid) +
-                "group by artist.userid " +
+                " group by artist.userid " +
                 "limit 1", null);
         if (cursor.moveToFirst()) {
             artist_id = cursor.getInt(0);
@@ -762,7 +762,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    } // wrong
+    }
 
     public String sug_popular_songs_of_week() {
         String result = "songs of the week : ";
@@ -908,7 +908,7 @@ public class dbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A "+
                 "join 'tb_music' as music on music.id = A.musicid "+
                 "where A.userid = "+String.valueOf(userid)+
-                "order by A.added_date desc "+
+                " order by A.added_date desc "+
                 "limit 5", null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0)+ ", ";
@@ -916,7 +916,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    } // doesn't work
+    }
 
     public String check_for_premium_end(int userid) {
         String result = "";
@@ -970,5 +970,23 @@ public class dbHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public List get_artist_albums(int userid){
+        SQLiteDatabase db = getReadableDatabase();
+        List result = new ArrayList();
+        Cursor cursor;
+        cursor = db.rawQuery("select distinct album.id,album.title from 'tb_album' as album  " +
+                "join 'tb_have_album' as A on A.albumid = album.id " +
+                "join 'tb_artist' as artist on A.userid = artist.userid " +
+                "where artist.userid = " + String.valueOf(userid), null);
+        if (cursor.moveToFirst()){
+            do {
+                ContentValues values = new ContentValues();
+                values.put(Album.key_id, cursor.getInt(cursor.getColumnIndex(Album.key_id)));
+                values.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                result.add(values);
+            }while (cursor.moveToNext());
+        }
+        return result;
+    }
 }
 
