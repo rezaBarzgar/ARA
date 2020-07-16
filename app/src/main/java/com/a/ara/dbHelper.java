@@ -995,7 +995,7 @@ public class dbHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String add_new_album(String title, String genre) {
+    public String add_new_album(String title, String genre,int userid) {
         String result = "";
         int id;
         SQLiteDatabase db = getReadableDatabase();

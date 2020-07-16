@@ -78,10 +78,10 @@ public class AraAdapter extends ArrayAdapter{
                 s += " : " + values.getAsString(user.key_user_first_name);
                 s += " " + values.getAsString(user.key_user_last_name);
             }else if (tag.equals("songs")){
-                s = values.getAsString(Music.key_music_title);
+                s = values.getAsString("music_title");
                 s += " : " + values.getAsString(Music.key_music_genre);
                 s += " _ " + values.getAsString(artist.key_nickname);
-                s += " _ " + values.getAsString(Album.key_title);
+                s += " _ " + values.getAsString("album_title");
             }else if (tag.equals("albums")){
                 s = values.getAsString(Album.key_title);
                 s += " : " + values.getAsString(artist.key_nickname);

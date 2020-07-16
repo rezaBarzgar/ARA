@@ -41,7 +41,7 @@ public class AddNewAlbum extends AppCompatActivity {
                 }
 
                 Toast.makeText(AddNewAlbum.this, dbh.add_new_album(
-                        title.getText().toString(),genre.getText().toString()
+                        title.getText().toString(),genre.getText().toString(),userid
                 ), Toast.LENGTH_SHORT).show();
             }
         });
