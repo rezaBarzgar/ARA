@@ -989,6 +989,8 @@ public class dbHelper extends SQLiteOpenHelper {
                 result.add(values);
             }while (cursor.moveToNext());
         }
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 }
