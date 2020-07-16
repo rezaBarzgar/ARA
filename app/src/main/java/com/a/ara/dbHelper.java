@@ -323,6 +323,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "select B.albumid from 'tb_have_album' as B " +
                 "where B.musicid =  "+ String.valueOf(songid) +
                 ")", null);
+                                //  cursor is empty
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
@@ -347,6 +348,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "join 'tb_music' as music on music.id = A.musicid join 'tb_have_album' as B " +
                 "on B.musicid = A.musicid join 'tb_artist' as artist on B.userid = artist.userid " +
                 "where A.playlistid = "+String.valueOf(playlistid), null);
+                        //      cursor is empty
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
@@ -737,19 +739,22 @@ public class dbHelper extends SQLiteOpenHelper {
         String artist_id = "";
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A " +
-                "on played.musicid join 'tb_artist' as artist on A.userid = artist.userid " +
-                "where played.userid = " + String.valueOf(userid) +
-                "group by artist.userid limit 1 ", null);
+        Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A" +
+                " on played.musicid join 'tb_artist' as artist on A.userid = artist.userid" +
+                " where played.userid = " + String.valueOf(userid) +
+                " group by artist.userid limit 1 ", null);
         if (cursor.moveToFirst()) {
             artist_id = String.valueOf(cursor.getInt(0));
         }
 
+        cursor.close();
+
+        // wrong query below
         cursor = db.rawQuery("select artist.nickname from'tb_artist' as artist " +
                 "where artist.genre = ( " +
                 "select artist.genre from 'tb_artist' as artist " +
-                "where artist.userid =  " + artist_id +
-                ")and not artist.userid =" + artist_id, null);
+                "where artist.userid =  " + String.valueOf(artist_id) +
+                ") and not artist.userid =" + String.valueOf(artist_id), null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         } else {
@@ -758,7 +763,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // wrong
 
     public String sug_popular_songs_of_week() {
         String result = "songs of the week : ";
@@ -770,8 +775,8 @@ public class dbHelper extends SQLiteOpenHelper {
         int day = Integer.valueOf(today);
         day = day - 7;
         if (day <= 0) day = 1;
-        thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year;
-        thisweek = date_to_string(string_to_date(thisweek));
+        thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year ;
+        thisweek = "'" + date_to_string(string_to_date(thisweek)) + "'";
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select music.title,count(*) from 'tb_played_song' as played join " +
@@ -788,7 +793,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // doesn't show anything
 
     public String sug_music_based_on_playes_genre(int userid) {
         String result = "suggested songs : ";
@@ -798,12 +803,14 @@ public class dbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select music.genre, count(*) as cnt from 'tb_played_song' as played " +
                 "join 'tb_music' as music on music.id = played.musicid " +
                 "where played.userid = " + String.valueOf(userid) +
-                "group by music.genre " +
-                "order by cnt desc " +
-                "limit 1", null);
+                " group by music.genre " +
+                " order by cnt desc " +
+                " limit 1", null);
         if (cursor.moveToFirst()) {
             genre_name = cursor.getString(0);
         }
+        cursor.close();
+        // wrong query below
         cursor = db.rawQuery("select music.title from 'tb_music' as music " +
                 "where music.genre = " + genre_name + " and music.id not in ( " +
                 "select played.musicid from 'tb_played_song' as played " +
@@ -818,7 +825,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // wrong
 
     public String sug_music_based_on_playlist(int userid) {
         String result = "suggestion for playlist : ";
@@ -854,7 +861,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // I didn't test it
 
     public String sug_same_region_artist(int userid) {
         String result = "suggested artist in your region : ";
@@ -866,11 +873,12 @@ public class dbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             user_region = String.valueOf(cursor.getInt(0));
         }
+        cursor.close();
         cursor = db.rawQuery("select artist.nickname from 'tb_artist' as artist join " +
                 "        'tb_users' as user on artist.userid = user.userid " +
                 "        where user.region = " + user_region + " and artist.userid not in ( " +
                 "          select followerid from 'tb_follow' " +
-                "          where followingid = 1030 and followerid between 2000 and 3000 " +
+                "          where followingid = 1030 and followerid between 2000 and 2999 " +
                 "        )limit 1", null);
         if (cursor.moveToFirst()) {
             result = result + (cursor.getString(0));
@@ -878,24 +886,25 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // doesn't show anything
 
     public String latest_song_played(int userid) {
         String result = "last music that played : ";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select music.title from 'tb_played_song' as played join 'tb_music' as music " +
                 "on music.id = played.musicid " +
-                "where played.userid = " + String.valueOf(userid) +
-                "order by played.played_date desc " +
-                "limit 1", null);
+                " where played.userid = " + String.valueOf(userid) +
+                " order by played.played_date desc " +
+                " limit 1", null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         }else result = "no music played recently";
+        cursor.close();
         return result;
     }
 
     public String five_latest_songs_of_artist(int userid){
-        String result ="5 latest songs of artist";
+        String result ="5 latest songs of artist : ";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A "+
                 "join 'tb_music' as music on music.id = A.musicid "+
@@ -908,13 +917,13 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    }
+    } // doesn't work
 
     public String check_for_premium_end(int userid) {
         String result = "";
 
         return result;
-    }
+    } // I didn't test it
 
 }
 

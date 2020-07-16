@@ -131,15 +131,29 @@ public class ShowProfile extends AppCompatActivity{
     }
 
     private void refresh_bio(Bundle income_info,TextView show_profile_info){
-        show_profile_info.setText(
-                income_info.getString(user.key_user_name) + "\n"
-                        + income_info.getString(user.key_user_first_name) + " "
-                        + income_info.getString(user.key_user_last_name) + "\n"
-                        + income_info.getString(user.key_user_email) + "\n"
-                        + income_info.getString(user.key_user_region) + "\n"
-                        + "followers : " + followers_count + "\n"
-                        + "following : " + followings_count
-        );
+        if (!is_artist) {
+            show_profile_info.setText(
+                    income_info.getString(user.key_user_name) + "\n"
+                            + income_info.getString(user.key_user_first_name) + " "
+                            + income_info.getString(user.key_user_last_name) + "\n"
+                            + income_info.getString(user.key_user_email) + "\n"
+                            + income_info.getString(user.key_user_region) + "\n"
+                            + "followers : " + followers_count + "\n"
+                            + "following : " + followings_count + "\n"
+                            + dbh.latest_song_played(userid)
+            );
+        }else {
+            show_profile_info.setText(
+                    income_info.getString(user.key_user_name) + "\n"
+                            + income_info.getString(user.key_user_first_name) + " "
+                            + income_info.getString(user.key_user_last_name) + "\n"
+                            + income_info.getString(user.key_user_email) + "\n"
+                            + income_info.getString(user.key_user_region) + "\n"
+                            + "followers : " + followers_count + "\n"
+                            + "following : " + followings_count + "\n"
+                            + dbh.five_latest_songs_of_artist(userid)
+            );
+        }
     }
 
 }

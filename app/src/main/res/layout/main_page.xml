@@ -24,7 +24,7 @@
             <TextView
                 android:textColor="@android:color/black"
                 android:gravity="top"
-                android:id="@+id/tv_suggestions"
+                android:id="@+id/tv_suggestions_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -82,16 +82,20 @@ public class MainActivity extends AppCompatActivity {
         TextView show_info = (TextView) findViewById(R.id.tv_brief_name);
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
         " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
-        " " + preferences.getString(user.key_user_last_name,"NOT FOUND"));
+        " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
+        "\nartist : " + /*dbh.sug_another_artist(preferences.getInt(user.key_user_id,0)) + */
+        "\n" + dbh.sug_popular_songs_of_week() +
+        "\n" /*+ dbh.sug_music_based_on_playes_genre(preferences.getInt(user.key_user_id,0)) */+
+        "\n" + dbh.sug_same_region_artist(preferences.getInt(user.key_user_id,0))
+        );
 
         if (dbh.check_for_premium_end(preferences.getInt(user.key_user_id,0)).equals("End")) {
             Toast.makeText(this, "your premium has finished", Toast.LENGTH_SHORT).show();
         }
 
+//        TextView suggestions = (TextView) findViewById(R.id.tv_suggestions_2);
+//        suggestions.setText("arist : ");
 
-
-        TextView suggestions = (TextView) findViewById(R.id.tv_suggestions);
-        suggestions.setText(""); // all suggestions are shown here
 
         show_profile = (Button) findViewById(R.id.btn_show_profile);
         show_profile.setOnClickListener(new View.OnClickListener() {
@@ -636,71 +640,82 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        SubMenu subMenu = menu.addSubMenu("import records");
-        subMenu.add("add users").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                addUser();
-                return false;
-            }
-        });
-        subMenu.add("add listners").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_listner();
-                return false;
-            }
-        });
-        subMenu.add("add artists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_artist();
-                return false;
-            }
-        });
-        subMenu.add("add Musics").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_music();
-                return false;
-            }
-        });
-        subMenu.add("add Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_album();
-                return false;
-            }
-        });
-        subMenu.add("add Playlists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_playlist();
-                return false;
-            }
-        });
-        subMenu.add("add have Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                add_have_album();
-                return false;
-            }
-        });
+        if (preferences.getString(user.key_user_name ,"***").equals("admin_ac")) {
 
+            SubMenu subMenu = menu.addSubMenu("import records");
+            subMenu.add("add users").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    addUser();
+                    return false;
+                }
+            });
+            subMenu.add("add listners").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_listner();
+                    return false;
+                }
+            });
+            subMenu.add("add artists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_artist();
+                    return false;
+                }
+            });
+            subMenu.add("add Musics").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_music();
+                    return false;
+                }
+            });
+            subMenu.add("add Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_album();
+                    return false;
+                }
+            });
+            subMenu.add("add Playlists").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_playlist();
+                    return false;
+                }
+            });
+            subMenu.add("add have Albums").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    add_have_album();
+                    return false;
+                }
+            });
 
-        menu.add("import all").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                addUser();
-                add_listner();
-                add_artist();
-                add_music();
-                add_album();
-                add_have_album();
-                add_playlist();
-                return false;
-            }
-        });
+            menu.add("import all").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    addUser();
+                    add_listner();
+                    add_artist();
+                    add_music();
+                    add_album();
+                    add_have_album();
+                    add_playlist();
+                    return false;
+                }
+            });
+
+            menu.add("clear database").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    clear_database();
+                    return false;
+                }
+            });
+
+        }
 
         menu.add("log out").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -713,14 +728,6 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
                 }
-//                preferences.edit().remove("username").apply();
-                return false;
-            }
-        });
-        menu.add("clear database").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                clear_database();
                 return false;
             }
         });
