@@ -735,10 +735,12 @@ public class dbHelper extends SQLiteOpenHelper {
         int artist_id = -1;
 
         SQLiteDatabase db = getReadableDatabase();//todo
-        Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A" +
-                " on played.musicid join 'tb_artist' as artist on A.userid = artist.userid" +
-                " where played.userid = " + String.valueOf(userid) +
-                " group by artist.userid limit 1 ", null);
+        Cursor cursor = db.rawQuery("select artist.userid, count(*) from 'tb_played_song' as played join 'tb_have_album' as A " +
+                "on played.musicid = A.musicid join 'tb_artist' as artist " +
+                "on artist.userid = A.userid " +
+                "where played.userid =  "+ String.valueOf(userid) +
+                "group by artist.userid " +
+                "limit 1", null);
         if (cursor.moveToFirst()) {
             artist_id = cursor.getInt(0);
         }
