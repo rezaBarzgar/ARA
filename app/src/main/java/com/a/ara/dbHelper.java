@@ -996,9 +996,25 @@ public class dbHelper extends SQLiteOpenHelper {
 
     public String add_new_album(String title,String genre){
         String result="";
+        int id;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor;
+        cursor = db.rawQuery("select id from 'tb_album' " +
+                "order by id desc " +
+                "limit 1", null);
+        if (cursor.moveToFirst()){
+            id = cursor.getInt(0) + 1;
+        }else id = 4001;
+        ContentValues values = new ContentValues();
+        values.put(Album.key_id,id);
+        values.put(Album.key_publish_date,date_to_string_without_time(null));
+        values.put(Album.key_title, title);
+        values.put(Album.key_genre, genre);
 
-
-
+        insert(values,"tb_album");
+        result = "inserted successfully";
+        if (db.isOpen()) db.close();
+        cursor.close();
         return result;
     }
 }
