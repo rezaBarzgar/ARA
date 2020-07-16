@@ -285,6 +285,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         return song_list;
     }
+
     public List get_songs_of_album(int albumid) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
@@ -796,5 +797,6 @@ public class dbHelper extends SQLiteOpenHelper {
 
         return result;
     }
+
 }
 

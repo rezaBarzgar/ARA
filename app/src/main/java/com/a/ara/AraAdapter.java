@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AraAdapter extends ArrayAdapter{
@@ -91,6 +93,10 @@ public class AraAdapter extends ArrayAdapter{
                 s = values.getAsString(user.key_user_name);
                 s += " : " + values.getAsString(user.key_user_first_name);
                 s += " " + values.getAsString(user.key_user_last_name);
+            }else if (tag.equals("album_items")){
+                s = values.getAsString(Music.key_music_title);
+                s += " : " + values.getAsString(Music.key_music_genre);
+                s += " _ " + values.getAsString(artist.key_nickname);
             }
             info.setText(s);
 
@@ -191,7 +197,7 @@ public class AraAdapter extends ArrayAdapter{
                             Toast.makeText(activity, dbh.unlike_album(userid,values.getAsInteger(Album.key_id))
                                     , Toast.LENGTH_SHORT).show();
                         }else if (id == R.id.popup_menu_album_songs){
-                            show_album_dialog();
+                            show_album_dialog(values.getAsInteger(Album.key_id));
                         }
                         return false;
                     }
@@ -230,6 +236,28 @@ public class AraAdapter extends ArrayAdapter{
                             activity.startActivity(show_pro);
                         }else if (id == R.id.following_popup_menu_unfollow){
                             Toast.makeText(activity, dbh.unfollow_user(userid, values.getAsInteger(user.key_user_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                });
+            }else if (tag.equals("album_items")){
+                popupMenu.inflate(R.menu.album_item_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.popup_menu_play_album_song){
+                            Toast.makeText(activity, dbh.play_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_report_album_song){
+                            Toast.makeText(activity, dbh.report_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_like_album_song){
+                            Toast.makeText(activity, dbh.like_song(userid,values.getAsInteger(Music.key_music_id))
+                                    , Toast.LENGTH_SHORT).show();
+                        }else if (id == R.id.popup_menu_unlike_album_song){
+                            Toast.makeText(activity, dbh.unlike_song(userid,values.getAsInteger(Music.key_music_id))
                                     , Toast.LENGTH_SHORT).show();
                         }
                         return false;
@@ -279,9 +307,14 @@ public class AraAdapter extends ArrayAdapter{
         }
     }
 
-    private void show_album_dialog(){
+    private void show_album_dialog(int albumid){
+        List list = dbh.get_songs_of_album(albumid);
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.album_list);
+        ListView album_list = (ListView) dialog.findViewById(R.id.album_items_list);
+        if (list == null) list = new ArrayList();
+        ArrayAdapter adapter = new AraAdapter(activity,list,userid,"album_items");
+        album_list.setAdapter(adapter);
         changeDialogSize(dialog);
         dialog.show();
     }
