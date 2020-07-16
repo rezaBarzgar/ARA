@@ -627,7 +627,7 @@ public class dbHelper extends SQLiteOpenHelper {
     }
 
     public String sug_another_artist(int userid) {
-        String result;
+        String result = "suggested artist : ";
         String artist_id = "";
 
         SQLiteDatabase db = getReadableDatabase();
@@ -643,7 +643,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "where not artist.userid = " + artist_id +
                 "limit 1", null);
         if (cursor.moveToFirst()) {
-            result = cursor.getString(0);
+            result = result + cursor.getString(0);
         } else {
             result = "not founded suggested artist";
         }
@@ -673,7 +673,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                result = result + cursor.getString(cursor.getColumnIndex(Music.key_music_title)) + " ";
+                result = result + cursor.getString(cursor.getColumnIndex(Music.key_music_title)) + ", ";
             } while (cursor.moveToNext());
 
         }
@@ -701,27 +701,69 @@ public class dbHelper extends SQLiteOpenHelper {
                 "where played.userid = " + String.valueOf(userid) +
                 ") limit 5", null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
-                result = result + cursor.getString(0);
-            }while (cursor.moveToNext());
-        }else result = "not founded suggested music";
+                result = result + cursor.getString(0) + ", ";
+            } while (cursor.moveToNext());
+        } else result = "not founded suggested music";
         return result;
     }
 
     public String sug_music_based_on_playlist(int userid) {
-        String result = "";
+        String result = "suggestion for playlist : ";
+        String playlist_id = "";
+        String common_genre = "";
 
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT A.playlistid , count(*) FROM 'tb_have_playlist' as A join 'tb_playlist' as playlist " +
+                "on A.playlistid = playlist.id " +
+                "where playlist.ownerid = " + String.valueOf(userid) +
+                "group by A.playlistid limit 1", null);
+        if (cursor.moveToFirst()) {
+            playlist_id = String.valueOf(cursor.getInt(0));
+        }
+        cursor = db.rawQuery("select music.genre , count(*) from 'tb_have_playlist' as A join " +
+                "'tb_music' as music on A.musicid = music.id " +
+                "where A.playlistid = " + playlist_id +
+                "group by music.genre limit 1", null);
+        if (cursor.moveToFirst()) {
+            common_genre = cursor.getString(0);
+        }
+        cursor = db.rawQuery("select music.title from 'tb_music' as music " +
+                "where music.genre = " + common_genre + " and music.id not in ( " +
+                "select A.musicid from 'tb_have_playlist' as A " +
+                "where A.playlistid = " + playlist_id + " )" +
+                " limit 5", null);
+        if (cursor.moveToFirst()) {
+            do {
+                result = result + cursor.getString(0) + ", ";
+            } while (cursor.moveToNext());
 
+        } else result = "not founded suggested music for you playlist";
         return result;
     }     // sug 4
 
     public String sug_same_region_artist(int userid) {
-        String result = "";
+        String result = "suggested artist in your region : ";
+        String user_region = "";
 
-
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select user.region from 'tb_users' as user " +
+                "where user.userid = " + String.valueOf(userid), null);
+        if (cursor.moveToFirst()) {
+            user_region = String.valueOf(cursor.getInt(0));
+        }
+        cursor = db.rawQuery("select artist.nickname from 'tb_artist' as artist join " +
+                "        'tb_users' as user on artist.userid = user.userid " +
+                "        where user.region = " + user_region + " and artist.userid not in ( " +
+                "          select followerid from 'tb_follow' " +
+                "          where followingid = 1030 and followerid between 2000 and 3000 " +
+                "        )limit 1", null);
+        if (cursor.moveToFirst()) {
+            result = result + (cursor.getString(0));
+        }else result = "no artist from you region founded";
         return result;
-    }     // sug 5
+    }
 
     public String check_for_premium_end(int userid) {
         String result = "";
@@ -729,3 +771,4 @@ public class dbHelper extends SQLiteOpenHelper {
         return result;
     }
 }
+
