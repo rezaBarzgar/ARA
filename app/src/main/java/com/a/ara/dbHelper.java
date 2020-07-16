@@ -809,16 +809,14 @@ public class dbHelper extends SQLiteOpenHelper {
     public String five_latest_songs_of_artist(int userid){
         String result ="5 latest songs of artist";
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select music.id, music.title, music.duration, music.genre from 'tb_have_album' as A "+
+        Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A "+
                 "join 'tb_music' as music on music.id = A.musicid "+
                 "where A.userid = "+String.valueOf(userid)+
                 "order by A.added_date desc "+
                 "limit 5", null);
         if (cursor.moveToFirst()) {
-            do {
-                result = result + cursor.getString(0)+", ";
-            }while (cursor.moveToNext());
-        }else result = "no recently music from artist";
+            result = result + cursor.getString(0)+ ", ";
+        }else result = "no music released recently";
         return result;
 
     }
@@ -828,6 +826,5 @@ public class dbHelper extends SQLiteOpenHelper {
 
         return result;
     }
-
 }
 
