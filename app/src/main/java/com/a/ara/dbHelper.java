@@ -340,6 +340,27 @@ public class dbHelper extends SQLiteOpenHelper {
         return song_list;
     }
 
+    public List get_songs_of_playlist(int playlistid) {
+        SQLiteDatabase db = getReadableDatabase();
+        List song_list = new ArrayList();
+        Cursor cursor = db.rawQuery("", null);
+        if (cursor.moveToFirst()) {
+            do {
+                ContentValues temp_v = new ContentValues();
+                temp_v.put(Music.key_music_id, cursor.getInt(cursor.getColumnIndex(Music.key_music_id)));
+                temp_v.put(Music.key_music_duration, cursor.getString(cursor.getColumnIndex(Music.key_music_duration)));
+                temp_v.put(Music.key_music_genre, cursor.getString(cursor.getColumnIndex(Music.key_music_genre)));
+                temp_v.put(Music.key_music_title, cursor.getString(cursor.getColumnIndex(Music.key_music_title)));
+                temp_v.put(artist.key_nickname, cursor.getString(cursor.getColumnIndex(artist.key_nickname)));
+
+                song_list.add(temp_v);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        if (db.isOpen()) db.close();
+        return song_list;
+    }
+
     public List get_album(String query) {
         SQLiteDatabase db = getReadableDatabase();
         List album_list = new ArrayList();

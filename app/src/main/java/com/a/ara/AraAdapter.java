@@ -208,11 +208,11 @@ public class AraAdapter extends ArrayAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        if (id == R.id.popup_menu_go_to_artist){
+                        if (id == R.id.popup_menu_playlist_songs){
+                            show_playlist_dialog(values.getAsInteger(playlist.key_id));
+                        }else if (id == R.id.popup_menu_like_playlist){
 
-                        }else if (id == R.id.popup_menu_like_album){
-
-                        }else if (id == R.id.popup_menu_unlike_album){
+                        }else if (id == R.id.popup_menu_unlike_playlist){
 
                         }
                         return false;
@@ -337,6 +337,18 @@ public class AraAdapter extends ArrayAdapter{
 
     private void show_songs_dialog(int songid){
         List list = dbh.get_songs_of_song(songid);
+        Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.album_list);
+        ListView album_list = (ListView) dialog.findViewById(R.id.album_items_list);
+        if (list == null) list = new ArrayList();
+        ArrayAdapter adapter = new AraAdapter(activity,list,userid,"album_items");
+        album_list.setAdapter(adapter);
+        changeDialogSize(dialog);
+        dialog.show();
+    }
+
+    private void show_playlist_dialog(int playlistid){
+        List list = dbh.get_songs_of_playlist(playlistid);
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.album_list);
         ListView album_list = (ListView) dialog.findViewById(R.id.album_items_list);
