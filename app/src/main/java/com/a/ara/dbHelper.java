@@ -337,18 +337,23 @@ public class dbHelper extends SQLiteOpenHelper {
 
     public List get_playlist(String query) {
         SQLiteDatabase db = getReadableDatabase();
-        List album_list = new ArrayList();
-        Cursor cursor = db.rawQuery("", null);
+        List playlist_list = new ArrayList();
+        Cursor cursor = db.rawQuery("SELECT pl.id, pl.ownerid, pl.title,pl.create_date, user.username FROM 'tb_playlist' as pl join 'tb_users' as user on pl.ownerid = user.userid " +
+                "where pl.title like '" +query+"%' ", null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
-                // fill temps
-                album_list.add(temp_v);
+                temp_v.put(playlist.key_id, cursor.getInt(cursor.getColumnIndex(playlist.key_id)));
+                temp_v.put(playlist.key_owner_id, cursor.getInt(cursor.getColumnIndex(playlist.key_owner_id)));
+                temp_v.put(playlist.key_title, cursor.getString(cursor.getColumnIndex(playlist.key_title)));
+                temp_v.put(playlist.key_create_date, cursor.getString(cursor.getColumnIndex(playlist.key_create_date)));
+                temp_v.put(user.key_user_name, cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                playlist_list.add(temp_v);
             } while (cursor.moveToNext());
         }
         cursor.close();
         if (db.isOpen()) db.close();
-        return album_list;
+        return playlist_list;
     }
 
     public List get_follow_items(String which, int userid) {
