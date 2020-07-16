@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         show_info.setText(preferences.getString(user.key_user_name,"NOT FOUND") +
         " : " + preferences.getString(user.key_user_first_name,"NOT FOUND") +
         " " + preferences.getString(user.key_user_last_name,"NOT FOUND") +
-        "\nartist : " + dbh.sug_another_artist(preferences.getInt(user.key_user_id,0))+
+        "\n" + dbh.sug_another_artist(preferences.getInt(user.key_user_id,0))+
         "\n" + dbh.sug_popular_songs_of_week() +
         "\n" /*+ dbh.sug_music_based_on_playes_genre(preferences.getInt(user.key_user_id,0)) */+
         "\n" + dbh.sug_same_region_artist(preferences.getInt(user.key_user_id,0))
@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_follow(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.follow);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -578,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_played_song(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.played_song);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -613,7 +613,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_reported_song(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.reported_song);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -648,7 +648,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_liked_music(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.liked_music);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -683,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_liked_album(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.liked_album);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -716,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void add_have_playlist(){
-        InputStream inputStream = getResources().openRawResource(R.raw.have_album);
+        InputStream inputStream = getResources().openRawResource(R.raw.have_playlist);
         StringBuilder sb = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         try {
@@ -946,6 +946,13 @@ public class MainActivity extends AppCompatActivity {
                     add_album();
                     add_have_album();
                     add_playlist();
+                    add_follow();
+                    add_liked_playlist();
+                    add_played_song();
+                    add_have_playlist();
+                    add_reported_song();
+                    add_liked_album();
+                    add_liked_music();
                     return false;
                 }
             });

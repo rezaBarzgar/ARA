@@ -1,0 +1,52 @@
+[
+  {
+    "userid": "1001",
+    "musicid": "3012",
+    "reported_date": "24/07/2019"
+  },
+  {
+    "userid": "1010",
+    "musicid": "3009",
+    "reported_date": "1/8/2019"
+  },
+  {
+    "userid": "1021",
+    "musicid": "3040",
+    "reported_date": "24/11/2019"
+  },
+  {
+    "userid": "1022",
+    "musicid": "3012",
+    "reported_date": "27/11/2019"
+  },
+  {
+    "userid": "1025",
+    "musicid": "3040",
+    "reported_date": "14/12/2019"
+  },
+  {
+    "userid": "1034",
+    "musicid": "3012",
+    "reported_date": "16/12/2019"
+  },
+  {
+    "userid": "1030",
+    "musicid": "3040",
+    "reported_date": "3/3/2020"
+  },
+  {
+    "userid": "1032",
+    "musicid": "3040",
+    "reported_date": "23/03/2020"
+  },
+  {
+    "userid": "1039",
+    "musicid": "3012",
+    "reported_date": "1/5/2020"
+  },
+  {
+    "userid": "1047",
+    "musicid": "3012",
+    "reported_date": "14/11/2020"
+  }
+]
