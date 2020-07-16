@@ -318,7 +318,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "join 'tb_music' as music on music.id = A.musicid join 'tb_artist' as artist on A.userid = artist.userid " +
                 "where A.albumid in ( " +
                 "select B.albumid from 'tb_have_album' as B " +
-                "where B.musicid =  "+ String.valueOf(songid)+")", null);
+                "where B.musicid =  " + String.valueOf(songid) + ")", null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -343,8 +343,8 @@ public class dbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select music.id, music.title, music.duration, music.genre, artist.nickname from 'tb_have_playlist' as A " +
                 "join 'tb_music' as music on music.id = A.musicid join 'tb_have_album' as B " +
                 "on B.musicid = A.musicid join 'tb_artist' as artist on B.userid = artist.userid " +
-                "where A.playlistid = "+String.valueOf(playlistid), null);
-                        //      cursor is empty
+                "where A.playlistid = " + String.valueOf(playlistid), null);
+        //      cursor is empty
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
@@ -388,7 +388,7 @@ public class dbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         List playlist_list = new ArrayList();
         Cursor cursor = db.rawQuery("SELECT pl.id, pl.ownerid, pl.title,pl.create_date, user.username FROM 'tb_playlist' as pl join 'tb_users' as user on pl.ownerid = user.userid " +
-                "where pl.title like '" +query+"%' ", null);
+                "where pl.title like '" + query + "%' ", null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
@@ -738,7 +738,7 @@ public class dbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select artist.userid, count(*) from 'tb_played_song' as played join 'tb_have_album' as A " +
                 "on played.musicid = A.musicid join 'tb_artist' as artist " +
                 "on artist.userid = A.userid " +
-                "where played.userid =  "+ String.valueOf(userid) +
+                "where played.userid =  " + String.valueOf(userid) +
                 " group by artist.userid " +
                 "limit 1", null);
         if (cursor.moveToFirst()) {
@@ -774,8 +774,8 @@ public class dbHelper extends SQLiteOpenHelper {
         int day = Integer.valueOf(today);
         day = day - 7;
         if (day <= 0) day = 1;
-        thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year ;
-        thisweek = "'" + date_to_string_without_time(string_to_date(thisweek)) + "'" ;
+        thisweek = String.valueOf(day) + "/" + this_month + "/" + this_year;
+        thisweek = "'" + date_to_string_without_time(string_to_date(thisweek)) + "'";
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select music.title,count(*) from 'tb_played_song' as played join " +
@@ -900,22 +900,22 @@ public class dbHelper extends SQLiteOpenHelper {
                 " limit 1", null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
-        }else result = "no music played recently";
+        } else result = "no music played recently";
         cursor.close();
         return result;
     }
 
-    public String five_latest_songs_of_artist(int userid){
-        String result ="5 latest songs of artist : ";
+    public String five_latest_songs_of_artist(int userid) {
+        String result = "5 latest songs of artist : ";
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A "+
-                "join 'tb_music' as music on music.id = A.musicid "+
-                "where A.userid = "+String.valueOf(userid)+
-                " order by A.added_date desc "+
+        Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A " +
+                "join 'tb_music' as music on music.id = A.musicid " +
+                "where A.userid = " + String.valueOf(userid) +
+                " order by A.added_date desc " +
                 "limit 5", null);
         if (cursor.moveToFirst()) {
-            result = result + cursor.getString(0)+ ", ";
-        }else result = "no music released recently";
+            result = result + cursor.getString(0) + ", ";
+        } else result = "no music released recently";
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
@@ -927,53 +927,53 @@ public class dbHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String saved_question(int userid){
-        String result ;
+    public String saved_question(int userid) {
+        String result;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT user.question  FROM 'tb_users' as user " +
-                "where user.userid = "+String.valueOf(userid), null);
-        if (cursor.moveToFirst()){
+                "where user.userid = " + String.valueOf(userid), null);
+        if (cursor.moveToFirst()) {
             result = cursor.getString(0);
-        }else result = "not founded !";
+        } else result = "not founded !";
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
     }
 
-    public String change_pass(String answer,String new_pass,int userid){
+    public String change_pass(String answer, String new_pass, int userid) {
         String result = "";
         boolean is_equal;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM 'tb_users' as user " +
-                "where user.userid = "+String.valueOf(userid), null);
-        if (cursor.moveToFirst()){
+                "where user.userid = " + String.valueOf(userid), null);
+        if (cursor.moveToFirst()) {
             ContentValues temp_v = new ContentValues();
             is_equal = answer.equals(cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
-            if (is_equal){
-                temp_v.put(user.key_user_id,cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
-                temp_v.put(user.key_user_first_name,cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
-                temp_v.put(user.key_user_last_name,cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
-                temp_v.put(user.key_user_name,cursor.getString(cursor.getColumnIndex(user.key_user_name)));
-                temp_v.put(user.key_user_password,new_pass);
-                temp_v.put(user.key_user_email,cursor.getString(cursor.getColumnIndex(user.key_user_email)));
-                temp_v.put(user.key_user_region,cursor.getString(cursor.getColumnIndex(user.key_user_region)));
-                temp_v.put(user.key_user_question,cursor.getString(cursor.getColumnIndex(user.key_user_question)));
-                temp_v.put(user.key_user_answer,cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
-                temp_v.put(user.key_user_answer,cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
+            if (is_equal) {
+                temp_v.put(user.key_user_id, cursor.getInt(cursor.getColumnIndex(user.key_user_id)));
+                temp_v.put(user.key_user_first_name, cursor.getString(cursor.getColumnIndex(user.key_user_first_name)));
+                temp_v.put(user.key_user_last_name, cursor.getString(cursor.getColumnIndex(user.key_user_last_name)));
+                temp_v.put(user.key_user_name, cursor.getString(cursor.getColumnIndex(user.key_user_name)));
+                temp_v.put(user.key_user_password, new_pass);
+                temp_v.put(user.key_user_email, cursor.getString(cursor.getColumnIndex(user.key_user_email)));
+                temp_v.put(user.key_user_region, cursor.getString(cursor.getColumnIndex(user.key_user_region)));
+                temp_v.put(user.key_user_question, cursor.getString(cursor.getColumnIndex(user.key_user_question)));
+                temp_v.put(user.key_user_answer, cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
+                temp_v.put(user.key_user_answer, cursor.getString(cursor.getColumnIndex(user.key_user_answer)));
 
-                delete("tb_users","userid = " + String.valueOf(userid));
-                insert(temp_v,"tb_users");
+                delete("tb_users", "userid = " + String.valueOf(userid));
+                insert(temp_v, "tb_users");
                 result = "password changed successfully";
-            }else{
+            } else {
                 result = "your answers doesn't match !";
             }
-        }else result = "not founded !";
+        } else result = "not founded !";
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
     }
 
-    public List get_artist_albums(int userid){
+    public List get_artist_albums(int userid) {
         SQLiteDatabase db = getReadableDatabase();
         List result = new ArrayList();
         Cursor cursor;
@@ -981,44 +981,45 @@ public class dbHelper extends SQLiteOpenHelper {
                 "join 'tb_have_album' as A on A.albumid = album.id " +
                 "join 'tb_artist' as artist on A.userid = artist.userid " +
                 "where artist.userid = " + String.valueOf(userid), null);
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 ContentValues values = new ContentValues();
                 values.put(Album.key_id, cursor.getInt(cursor.getColumnIndex(Album.key_id)));
                 values.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
                 values.put(artist.key_user_id, cursor.getString(cursor.getColumnIndex(artist.key_user_id)));
                 result.add(values);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
     }
 
-    public String add_new_album(String title,String genre){
-        String result="";
+    public String add_new_album(String title, String genre) {
+        String result = "";
         int id;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor;
         cursor = db.rawQuery("select id from 'tb_album' " +
                 "order by id desc " +
                 "limit 1", null);
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             id = cursor.getInt(0) + 1;
-        }else id = 4001;
+        } else id = 4001;
         ContentValues values = new ContentValues();
-        values.put(Album.key_id,id);
-        values.put(Album.key_publish_date,date_to_string_without_time(null));
+        values.put(Album.key_id, id);
+        values.put(Album.key_publish_date, date_to_string_without_time(null));
         values.put(Album.key_title, title);
         values.put(Album.key_genre, genre);
 
-        insert(values,"tb_album");
+        insert(values, "tb_album");
         result = "inserted successfully";
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
     }
-    public String add_song(String title, int duration, String genre,int albumid, int userid){
+
+    public String add_song(String title, int duration, String genre, int albumid, int userid) {
         String result = "";
         int music_id;
         SQLiteDatabase db = getReadableDatabase();
@@ -1026,22 +1027,22 @@ public class dbHelper extends SQLiteOpenHelper {
         cursor = db.rawQuery("select id from 'tb_music' " +
                 "order by id desc " +
                 "limit 1", null);
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             music_id = cursor.getInt(0) + 1;
-        }else music_id =3001;
+        } else music_id = 3001;
 
         ContentValues music_values = new ContentValues();
-        music_values.put(Music.key_music_id,music_id);
-        music_values.put(Music.key_music_title , title);
+        music_values.put(Music.key_music_id, music_id);
+        music_values.put(Music.key_music_title, title);
         music_values.put(Music.key_music_duration, duration);
         music_values.put(Music.key_music_genre, genre);
-        insert(music_values,"tb_music");
+        insert(music_values, "tb_music");
 
 
         ContentValues have_album = new ContentValues();
-        have_album.put(Album.key_id,albumid);
-        have_album.put(artist.key_user_id,userid);
-        have_album.put(Music.key_music_id,music_id);
+        have_album.put("albumid", albumid);
+        have_album.put(artist.key_user_id, userid);
+        have_album.put("musicid", music_id);
         have_album.put("added_date", date_to_string_without_time(null));
         insert(have_album, "tb_have_album");
 
@@ -1053,4 +1054,3 @@ public class dbHelper extends SQLiteOpenHelper {
 
     }
 }
-
