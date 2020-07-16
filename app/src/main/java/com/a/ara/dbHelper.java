@@ -285,14 +285,14 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         return song_list;
     }
-    public List get_songs_of_album(String query) {
+    public List get_songs_of_album(String albumid) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
         Cursor cursor = db.rawQuery("select music.id,music.title,music.duration,music.genre,artist.nickname from 'tb_have_album' as have_album  join 'tb_music' as music  " +
                 "               on music.id = have_album.musicid " +
                 "                join 'tb_artist' as artist on have_album.userid = artist.userid " +
                 "                 join 'tb_album' as album on album.id = have_album.albumid  " +
-                "               where album.title = '" + query +"'", null);
+                "               where album.id = '" + albumid +"'", null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
