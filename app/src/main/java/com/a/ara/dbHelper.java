@@ -285,7 +285,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         return song_list;
     }
-    public List get_songs_of_album(String albumid) {
+    public List get_songs_of_album(int albumid) {
         SQLiteDatabase db = getReadableDatabase();
         List song_list = new ArrayList();
         Cursor cursor = db.rawQuery("select music.id,music.title,music.duration,music.genre,artist.nickname from 'tb_have_album' as have_album  join 'tb_music' as music  " +
@@ -654,7 +654,7 @@ public class dbHelper extends SQLiteOpenHelper {
         String result = "suggested artist : ";
         String artist_id = "";
 
-        SQLiteDatabase db = getReadableDatabase();// todo dorost konesh ba genre
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select artist.userid, count(played.musicid) from 'tb_played_song' as played join 'tb_have_album' as A " +
                 "on played.musicid join 'tb_artist' as artist on A.userid = artist.userid " +
                 "where played.userid = " + String.valueOf(userid) +
