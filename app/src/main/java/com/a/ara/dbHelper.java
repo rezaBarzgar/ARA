@@ -993,5 +993,13 @@ public class dbHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+
+    public String add_new_album(String title,String genre){
+        String result="";
+
+
+
+        return result;
+    }
 }
 

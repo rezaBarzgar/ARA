@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.a.ara.ChangePassword">
+    tools:context="com.a.ara.AddNewAlbum">
 
-    <TextView
-        android:id="@+id/tv_question"
+    <EditText
+        android:id="@+id/et_add_album_title"
+        android:hint="title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
-        android:textColor="@android:color/black"
-        android:id="@+id/et_change_password_answer"
-        android:hint="answer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/et_change_password_password"
-        android:hint="new password"
-        android:inputType="textPassword"
+        android:id="@+id/et_add_album_genre"
+        android:hint="genre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btn_submit_change_password"
-        android:text="Submit"
+        android:text="submit"
+        android:id="@+id/btn_submit_new_album"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-
-
 
 </LinearLayout>
