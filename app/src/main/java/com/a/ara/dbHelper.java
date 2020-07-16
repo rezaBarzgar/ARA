@@ -293,7 +293,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "               on music.id = have_album.musicid " +
                 "                join 'tb_artist' as artist on have_album.userid = artist.userid " +
                 "                 join 'tb_album' as album on album.id = have_album.albumid  " +
-                "               where album.id = " + String.valueOf(albumid) , null);
+                "               where album.id = " + String.valueOf(albumid), null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
@@ -667,8 +667,8 @@ public class dbHelper extends SQLiteOpenHelper {
         cursor = db.rawQuery("select artist.nickname from'tb_artist' as artist " +
                 "where artist.genre = ( " +
                 "select artist.genre from 'tb_artist' as artist " +
-                "where artist.userid =  "+artist_id +
-                ")and not artist.userid ="+artist_id, null);
+                "where artist.userid =  " + artist_id +
+                ")and not artist.userid =" + artist_id, null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0);
         } else {
@@ -788,8 +788,39 @@ public class dbHelper extends SQLiteOpenHelper {
                 "        )limit 1", null);
         if (cursor.moveToFirst()) {
             result = result + (cursor.getString(0));
-        }else result = "no artist from you region founded";
+        } else result = "no artist from you region founded";
         return result;
+    }
+
+    public String latest_song_played(int userid) {
+        String result = "last music that played : ";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select music.title from 'tb_played_song' as played join 'tb_music' as music " +
+                "on music.id = played.musicid " +
+                "where played.userid = " + String.valueOf(userid) +
+                "order by played.played_date desc " +
+                "limit 1", null);
+        if (cursor.moveToFirst()) {
+            result = result + cursor.getString(0);
+        }else result = "no music played recently";
+        return result;
+    }
+
+    public String five_latest_songs_of_artist(int userid){
+        String result ="5 latest songs of artist";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select music.id, music.title, music.duration, music.genre from 'tb_have_album' as A "+
+                "join 'tb_music' as music on music.id = A.musicid "+
+                "where A.userid = "+String.valueOf(userid)+
+                "order by A.added_date desc "+
+                "limit 5", null);
+        if (cursor.moveToFirst()) {
+            do {
+                result = result + cursor.getString(0)+", ";
+            }while (cursor.moveToNext());
+        }else result = "no music played recently";
+        return result;
+
     }
 
     public String check_for_premium_end(int userid) {
