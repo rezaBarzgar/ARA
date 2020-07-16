@@ -1013,6 +1013,9 @@ public class dbHelper extends SQLiteOpenHelper {
         values.put(Album.key_genre, genre);
 
         insert(values, "tb_album");
+
+        add_song(title,120,genre,id,userid);
+
         result = "inserted successfully";
         if (db.isOpen()) db.close();
         cursor.close();
