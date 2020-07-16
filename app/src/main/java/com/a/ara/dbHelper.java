@@ -977,7 +977,7 @@ public class dbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         List result = new ArrayList();
         Cursor cursor;
-        cursor = db.rawQuery("select distinct album.id,album.title from 'tb_album' as album  " +
+        cursor = db.rawQuery("select distinct album.id,album.title, artist.userid from 'tb_album' as album  " +
                 "join 'tb_have_album' as A on A.albumid = album.id " +
                 "join 'tb_artist' as artist on A.userid = artist.userid " +
                 "where artist.userid = " + String.valueOf(userid), null);
@@ -986,6 +986,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(Album.key_id, cursor.getInt(cursor.getColumnIndex(Album.key_id)));
                 values.put(Album.key_title, cursor.getString(cursor.getColumnIndex(Album.key_title)));
+                values.put(artist.key_user_id, cursor.getString(cursor.getColumnIndex(artist.key_user_id)));
                 result.add(values);
             }while (cursor.moveToNext());
         }
