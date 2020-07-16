@@ -292,7 +292,7 @@ public class dbHelper extends SQLiteOpenHelper {
                 "               on music.id = have_album.musicid " +
                 "                join 'tb_artist' as artist on have_album.userid = artist.userid " +
                 "                 join 'tb_album' as album on album.id = have_album.albumid  " +
-                "               where album.id = '" + albumid +"'", null);
+                "               where album.id = " + String.valueOf(albumid) , null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues temp_v = new ContentValues();
