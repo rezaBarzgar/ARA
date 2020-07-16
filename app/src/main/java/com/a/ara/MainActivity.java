@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     List list = new ArrayList();
     ArrayAdapter adapter;
-    Button show_profile;
 
     public static final int sign_up_req_code = 1;
 
@@ -63,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         dbh = new dbHelper(this,"sho");
+
+        add_admin();
 
         preferences = getSharedPreferences("locals",MODE_PRIVATE);
         current_user = preferences.getString("username","***");
@@ -305,6 +306,20 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void add_admin(){
+        ContentValues values = new ContentValues();
+        values.put(user.key_user_id, 1999);
+        values.put(user.key_user_first_name,"admin");
+        values.put(user.key_user_last_name,"access");
+        values.put(user.key_user_name,"admin_ac");
+        values.put(user.key_user_password,"admin123");
+        values.put(user.key_user_email,"amhgh1377@gmail.com");
+        values.put(user.key_user_region,"Asia");
+        values.put(user.key_user_question,"favorite color");
+        values.put(user.key_user_answer,"black");
+        dbh.insert(values,"tb_users");
     }
 
     private void add_listner(){

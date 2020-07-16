@@ -762,7 +762,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    } // wrong
+    }
 
     public String sug_popular_songs_of_week() {
         String result = "songs of the week : ";
@@ -888,7 +888,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    } // doesn't show anything
+    }
 
     public String latest_song_played(int userid) {
         String result = "last music that played : ";
@@ -911,7 +911,7 @@ public class dbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select music.title from 'tb_have_album' as A "+
                 "join 'tb_music' as music on music.id = A.musicid "+
                 "where A.userid = "+String.valueOf(userid)+
-                "order by A.added_date desc "+
+                " order by A.added_date desc "+
                 "limit 5", null);
         if (cursor.moveToFirst()) {
             result = result + cursor.getString(0)+ ", ";
@@ -919,7 +919,7 @@ public class dbHelper extends SQLiteOpenHelper {
         if (db.isOpen()) db.close();
         cursor.close();
         return result;
-    } // doesn't work
+    }
 
     public String check_for_premium_end(int userid) {
         String result = "";
